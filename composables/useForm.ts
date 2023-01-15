@@ -32,5 +32,5 @@ export default function useForm({ label, rules, validateOnInit, value }: Props) 
         }
     };
 
-    return { error, updateInputValue };
+    return { error, labelId: labelId.value, updateInputValue };
 }
