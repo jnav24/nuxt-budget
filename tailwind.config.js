@@ -9,6 +9,10 @@ module.exports = {
         './app.vue',
     ],
     theme: {
+        fontFamily: {
+            body: ['Nunito', 'sans-serif'],
+            header: ['Avenir', 'Helvetica', 'Arial', 'sans-serif'],
+        },
         extend: {
             colors: {
                 danger: '#C62828',
