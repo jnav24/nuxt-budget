@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RulesType } from '~/types/form';
+
 const emit = defineEmits<{ (e: 'update:value', value: string): void }>();
 const props = withDefaults(
     defineProps<{
@@ -9,21 +11,29 @@ const props = withDefaults(
         password?: boolean;
         placeholder?: boolean;
         readOnly?: boolean;
-        rules: string[];
+        rules?: RulesType | Array<keyof RulesType>;
+        validateOnInit?: boolean;
         value: string;
     }>(),
-    { onBlur: true },
+    { onBlur: true, validateOnInit: false },
 );
 
-const form = inject('form');
+const { error, labelId, updateInputValue } = useForm({
+    label: props.label,
+    validateOnInit: props.validateOnInit,
+    value: props.value,
+    rules: props.rules,
+});
 
-const updateValue = (inputValue: string) => {
-    emit('update:value', inputValue);
+const updateValue = (event: InputEvent | FocusEvent) => {
+    const { value } = event.target as HTMLInputElement;
+    updateInputValue(value);
+    emit('update:value', value);
 };
 
-const updateOnBlur = (value: string) => {
+const updateOnBlur = (event: FocusEvent) => {
     if (props.onBlur) {
-        return updateValue(value);
+        return updateValue(event);
     }
 
     return null;
@@ -32,7 +42,7 @@ const updateOnBlur = (value: string) => {
 
 <template>
     <div class="relative">
-        <FormFieldsLabel v-if="!placeholder" :error="null" labelId="" :label="label" />
+        <FormFieldsLabel v-if="!placeholder" :error="error" labelId="labelId" :label="label" />
 
         <div class="relative mb-2">
             <div
@@ -53,8 +63,8 @@ const updateOnBlur = (value: string) => {
                 :type="password ? 'password' : 'text'"
                 :value="value"
                 :autocomplete="noAutocomplete || password ? 'on' : 'off'"
-                @blur="updateOnBlur($event.target.value)"
-                @input="updateValue($event.target.value)"
+                @blur="updateOnBlur($event)"
+                @input="updateValue($event)"
                 :aria-labelledby="labelId"
                 :readonly="readOnly"
                 :placeholder="placeholder ? label : ''"
