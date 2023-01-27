@@ -12,6 +12,7 @@ Converting Vue 3.0.11 app to Nuxt 3
 - Docker
 - Prisma
 - Pothos GraphQL
+- TailwindCSS
 
 ## Screenshots
 
