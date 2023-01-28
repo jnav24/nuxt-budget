@@ -38,19 +38,19 @@ const styles = () => {
 
     switch (variantsMapping[props.variant] ?? 'p') {
         case 'h1':
-            classes.push('text-4xl font-header');
-            break;
-        case 'h2':
-            classes.push('text-3xl font-header');
-            break;
-        case 'h3':
             classes.push('text-2xl font-header');
             break;
-        case 'h4':
+        case 'h2':
+            classes.push('text-1xl font-header');
+            break;
+        case 'h3':
             classes.push('text-xl font-header');
             break;
-        case 'h5':
+        case 'h4':
             classes.push('text-lg font-header');
+            break;
+        case 'h5':
+            classes.push('text-md font-header');
             break;
         default:
             if (props.variant === 'caption') {
