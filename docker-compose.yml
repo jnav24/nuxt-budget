@@ -3,7 +3,7 @@ version: '3'
 services:
   mysql:
     image: mysql:5.7
-    container_name: '${APP_NAME}-mysql'
+    container_name: '${APP_SLUG}-mysql'
     ports:
       - '${DB_PORT}:3306'
     environment:
@@ -16,7 +16,7 @@ services:
 
   redis-primary:
     image: redis:latest
-    container_name: '${APP_NAME}-redis-primary'
+    container_name: '${APP_SLUG}-redis-primary'
     command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes:
       - ./.docker/redis/redis.conf:/etc/redis/redis.conf
@@ -28,7 +28,7 @@ services:
 
   redis-slave:
     image: redis:latest
-    container_name: '${APP_NAME}-redis-replica'
+    container_name: '${APP_SLUG}-redis-replica'
     ports:
       - '${REDIS_REPLICA_PORT}:6379'
     command: redis-server /etc/redis.conf --replicaof master 6379
