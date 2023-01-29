@@ -1,3 +1,11 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DB_URL")
