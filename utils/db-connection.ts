@@ -7,6 +7,7 @@ const config = useRuntimeConfig();
 // https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
 declare global {
     var __redis: Redis | undefined;
+    var __redisRead: Redis | undefined;
     var __db: MySQLPrismaClient | undefined;
 }
 
@@ -17,11 +18,19 @@ enum RedisDB {
     SUBSCRIBER,
 }
 
-const redisConfig = {
-    port: Number(config.REDIS_PORT),
-    host: config.REDIS_HOST,
-    family: 4,
-    password: config.REDIS_PASSWORD,
+const redisConfigTest = {
+    read: {
+        port: Number(config.REDIS_REPLICA_PORT),
+        host: config.REDIS_HOST,
+        family: 4,
+        password: config.REDIS_PASSWORD,
+    },
+    write: {
+        port: Number(config.REDIS_PRIMARY_PORT),
+        host: config.REDIS_HOST,
+        family: 4,
+        password: config.REDIS_PASSWORD,
+    },
 };
 
 const setDBClient = () => {
@@ -37,14 +46,16 @@ const setDBClient = () => {
     return new MySQLPrismaClient({ datasources: { db: { url: config.DB_URL } } });
 };
 
-const setRedisClient = () => {
+const setRedisClient = (configKey: keyof redisConfig, type: RedisDB, globalVar: string) => {
     const redis = new IORedis({
-        ...redisConfig,
-        db: RedisDB.SESSION,
+        ...redis.config[configKey],
+        db: type,
     });
-    global.__redis = redis;
+    global[globalVar] = redis;
     return redis;
 };
 
 export const db: MySQLPrismaClient = global.__db || setDBClient();
-export const redis: Redis = global.__redis || setRedisClient();
+export const redis: Redis = global.__redis || setRedisClient('write', RedisDB.SESSION, '__redis');
+export const redisRead: Redis =
+    global.__redisRead || setRedisClient('read', RedisDB.SESSION, '__redisRead');
