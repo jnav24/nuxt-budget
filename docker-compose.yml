@@ -31,11 +31,11 @@ services:
     container_name: '${APP_SLUG}-redis-replica'
     ports:
       - '${REDIS_REPLICA_PORT}:6379'
-    command: redis-server /etc/redis.conf --replicaof master 6379
+    command: redis-server /etc/redis/redis.conf --replicaof ${APP_SLUG}-redis-primary ${REDIS_PRIMARY_PORT} 
     depends_on:
       - redis-primary
     volumes:
-      - ./.docker/redis/redis.conf:/etc/redis/redis.conf
+      - ./.docker/redis/replica/redis.conf:/etc/redis/redis.conf
     networks:
       - redis-replication
 
