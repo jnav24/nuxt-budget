@@ -26,3 +26,13 @@ export class ValidationException extends BaseException {
         return errors;
     }
 }
+
+export class UnauthorizedException extends BaseException {
+    constructor(message: string) {
+        super(message);
+        const status = 401;
+        this.code = STATUS_CODES[status] ?? '';
+        this.name = 'UnauthorizedException';
+        this.status = status;
+    }
+}
