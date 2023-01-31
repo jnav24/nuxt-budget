@@ -19,7 +19,16 @@
                 </div>
             </div>
 
-            <slot />
+            <div class="pb-6 px-0 sm:px-6 sm:shadow-sm">
+                <slot />
+            </div>
+
+            <div
+                class="py-4 px-6 sm:bg-gray-100 flex flex-row justify-center sm:justify-end items-center"
+                v-if="$slots.footer"
+            >
+                <slot name="footer"></slot>
+            </div>
         </div>
     </div>
 </template>
