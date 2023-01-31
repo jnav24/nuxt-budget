@@ -18,7 +18,19 @@ enum RedisDB {
     SUBSCRIBER,
 }
 
-const redisConfigTest = {
+type RedisOptions = {
+    port: number;
+    host: string;
+    family: number;
+    password: string;
+};
+
+type RedisConfig = {
+    read: RedisOptions;
+    write: RedisOptions;
+};
+
+const redisConfig: RedisConfig = {
     read: {
         port: Number(config.REDIS_REPLICA_PORT),
         host: config.REDIS_HOST,
@@ -46,12 +58,12 @@ const setDBClient = () => {
     return new MySQLPrismaClient({ datasources: { db: { url: config.DB_URL } } });
 };
 
-const setRedisClient = (configKey: keyof redisConfig, type: RedisDB, globalVar: string) => {
+const setRedisClient = (configKey: keyof RedisConfig, type: RedisDB, globalVar: string) => {
     const redis = new IORedis({
-        ...redis.config[configKey],
+        ...redisConfig[configKey],
         db: type,
     });
-    global[globalVar] = redis;
+    (global as any)[globalVar] = redis;
     return redis;
 };
 
