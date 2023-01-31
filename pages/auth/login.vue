@@ -1,11 +1,18 @@
 <script setup>
 definePageMeta({
-    layout: 'auth',
+    middleware: ['authenticated'],
 });
 
-useHead({ title: 'Dime Budget | Login' })
+useHead({ title: 'Dime Budget | Login' });
 </script>
 
 <template>
-    <h1>hello</h1>
+    <NuxtLayout name="auth">
+        <FormLogin />
+        <template #footer>
+            <NuxtLink class="text-gray-700 underline text-sm hover:no-underline" to="/auth/forgot">
+                Forgot Password?
+            </NuxtLink>
+        </template>
+    </NuxtLayout>
 </template>
