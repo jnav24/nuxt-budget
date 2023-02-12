@@ -1,0 +1,26 @@
+type Auth {
+  mfa: Boolean
+  success: Boolean
+}
+
+type Base {
+  success: Boolean
+}
+
+scalar DateTime
+
+type Mutation {
+  logout: Auth
+}
+
+type Query {
+  getUser: Users
+}
+
+type UserProfile {
+  firstName: String!
+}
+
+type Users {
+  email: String!
+}
