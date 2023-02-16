@@ -28,10 +28,10 @@ const handleSubmit = (e: SubmitEvent) => {
         Welcome Back
     </h1>
 
-    <Form v-model:valid="valid" @handleSubmit="handleSubmit">
-        <FormFieldsInput label="Email" v-model:value="form.email.value" :rules="form.email.rules" />
+    <BudgetForm v-model:valid="valid" @handleSubmit="handleSubmit">
+        <BudgetInput label="Email" v-model:value="form.email.value" :rules="form.email.rules" />
 
-        <FormFieldsInput
+        <BudgetInput
             label="Password"
             password
             v-model:value="form.password.value"
@@ -39,9 +39,9 @@ const handleSubmit = (e: SubmitEvent) => {
         />
 
         <div class="my-4">
-            <FormFieldsCheckbox label="Remember Me" v-model:value="form.rememberMe.value" />
+            <BudgetCheckbox label="Remember Me" v-model:value="form.rememberMe.value" />
         </div>
 
-        <FormFieldsButton block color="secondary" :disabled="!valid">Login</FormFieldsButton>
-    </Form>
+        <BudgetButton block color="secondary" :disabled="!valid">Login</BudgetButton>
+    </BudgetForm>
 </template>
