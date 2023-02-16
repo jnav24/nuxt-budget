@@ -14,6 +14,9 @@ export default defineNuxtConfig({
         },
     },
     css: ['~/assets/css/main.css'],
+    modules: [
+        ['./modules/form/module'],
+    ],
     postcss: {
         plugins: {
             tailwindcss: {},
@@ -21,6 +24,7 @@ export default defineNuxtConfig({
         },
     },
     runtimeConfig: {
+        APP_ENV: process.env.APP_ENV ?? 'development',
         DB_URL: process.env.DB_URL,
         REDIS_HOST: process.env.REDIS_HOST ?? '',
         REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
