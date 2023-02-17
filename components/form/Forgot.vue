@@ -17,8 +17,8 @@ const handleSubmit = () => {};
         Enter your email and we will send you a link with instructions on resetting your password.
     </p>
 
-    <Form v-model:valid="valid" @handleSubmit="handleSubmit">
-        <FormFieldsInput label="Email" :rules="form.email.rules" v-model:value="form.email.value" />
-        <FormFieldsButton block color="secondary" :disabled="!valid">Send Email</FormFieldsButton>
-    </Form>
+    <BudgetForm v-model:valid="valid" @handleSubmit="handleSubmit">
+        <BudgetInput label="Email" :rules="form.email.rules" v-model:value="form.email.value" />
+        <BudgetButton block color="secondary" :disabled="!valid">Send Email</BudgetButton>
+    </BudgetForm>
 </template>
