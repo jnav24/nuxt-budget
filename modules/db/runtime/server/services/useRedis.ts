@@ -1,6 +1,11 @@
-import IORedis from 'ioredis';
+import IORedis, { Redis } from 'ioredis';
 
 const config = useRuntimeConfig();
+
+declare global {
+    var __primary: Redis | undefined;
+    var __replica1: Redis | undefined;
+}
 
 enum RedisDB {
     SESSION,
@@ -37,13 +42,16 @@ const redisConfig: RedisConfig = {
 };
 
 const setRedisClient = (configKey: keyof RedisConfig, type: RedisDB) => {
-    return new IORedis({
+    const redis = new IORedis({
         ...redisConfig[configKey],
         db: type,
     });
+
+    (global as any)[`__${configKey}`] = redis;
+    return redis;
 };
 
 export const useRedis = () => ({
-    session: setRedisClient('primary', RedisDB.SESSION),
-    sessionReplica: setRedisClient('replica1', RedisDB.SESSION),
+    session: global.__primary || setRedisClient('primary', RedisDB.SESSION),
+    sessionReplica: global.__replica1 || setRedisClient('replica1', RedisDB.SESSION),
 });

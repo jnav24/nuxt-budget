@@ -2,19 +2,20 @@ import { PrismaClient as MySQLPrismaClient } from '@prisma/client';
 
 const config = useRuntimeConfig();
 
+declare global {
+    var __db: MySQLPrismaClient | undefined;
+}
+
 const setDatabase = () => {
-    if (config.APP_ENV === 'development') {
-        const db = new MySQLPrismaClient({
-            datasources: { db: { url: config.DB_URL } },
-            log: ['query', 'warn', 'error'],
-        });
+    const db = new MySQLPrismaClient({
+        datasources: { db: { url: config.DB_URL } },
+        log: config.APP_ENV === 'development' ? ['query', 'warn', 'error'] : undefined,
+    });
 
-        return db;
-    }
-
-    return new MySQLPrismaClient({ datasources: { db: { url: config.DB_URL } } });
+    global.__db = db;
+    return db;
 };
 
 export const useDatabase = () => ({
-    db: setDatabase(),
+    db: global.__db || setDatabase(),
 });
