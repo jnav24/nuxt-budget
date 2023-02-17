@@ -1,5 +1,7 @@
 import { builder } from '~/server/graphql/builder';
-import { db } from '~/utils/db-connection';
+import { useDatabase } from '#budgetdb';
+
+const { db } = useDatabase();
 
 const setBuilder = (pothos: typeof builder) => {
     pothos.queryField('getUser', (t) =>
@@ -8,7 +10,6 @@ const setBuilder = (pothos: typeof builder) => {
             type: 'Users',
             resolve: async () => {
                 return db.users.findFirst({
-                    rejectOnNotFound: true,
                     where: { id: 1 },
                 });
             },

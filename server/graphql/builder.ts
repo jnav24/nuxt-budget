@@ -4,9 +4,11 @@ import SimpleObjectsPlugin from '@pothos/plugin-simple-objects';
 import PrismaPlugin from '@pothos/plugin-prisma';
 import { IncomingMessage, ServerResponse } from 'http';
 import { UnauthorizedException } from '~/utils/exceptions';
-import { db } from '~/utils/db-connection';
+import { useDatabase } from '#budgetdb';
 import type PrismaTypes from '@pothos/plugin-prisma/generated';
 import { Auth, Base } from '~/server/graphql/generated/types';
+
+const { db } = useDatabase();
 
 export type Context = {
     req: IncomingMessage;
