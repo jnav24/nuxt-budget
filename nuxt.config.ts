@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     },
     css: ['~/assets/css/main.css'],
     modules: [
+        ['./modules/db/module'],
         ['./modules/form/module'],
     ],
     postcss: {
