@@ -5,7 +5,6 @@ services:
     platform: linux/x86_64
     image: mysql:5.7
     container_name: '${APP_SLUG}-mysql'
-    command: mysql -p${DB_ROOT_PASSWORD} -e "GRANT ALL PRIVILEGES ON *.* TO '${DB_USERNAME}'@'%';"
     ports:
       - '${DB_PORT}:3306'
     environment:
@@ -15,6 +14,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ${DB_DATA_PATH}:/var/lib/mysql
+      - ./.docker/mysql/entry:/docker-entrypoint-initdb.d
 
   redis-primary:
     image: redis:latest
