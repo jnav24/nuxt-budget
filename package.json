@@ -6,6 +6,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "codegen": "graphql-codegen --config codegen.yml",
     "update:prisma": "yarn add -D prisma@latest && yarn add @prisma/client@latest && npx prisma generate"
   },
@@ -13,6 +15,7 @@
     "@graphql-codegen/cli": "^2.16.4",
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-operations": "^2.5.12",
+    "@vitest/coverage-c8": "^0.28.5",
     "autoprefixer": "^10.4.13",
     "nuxt": "3.0.0",
     "postcss": "^8.4.19",
