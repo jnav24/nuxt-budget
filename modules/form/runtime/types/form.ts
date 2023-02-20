@@ -20,8 +20,9 @@ export type RulesType = {
     'alpha-numeric'?: RulesOptions;
     email?: RulesOptions;
     [key: `eq:${number}`]: RulesOptions;
-    float?: RulesOptions;
+    [key: `float:${number}`]: RulesOptions;
     [key: `gt:${number}`]: RulesOptions;
+    [key: `lt:${number}`]: RulesOptions;
     'has-int'?: RulesOptions;
     lower?: RulesOptions;
     [key: `match:${string}`]: RulesOptions;

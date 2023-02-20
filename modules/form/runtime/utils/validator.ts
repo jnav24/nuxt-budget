@@ -89,6 +89,12 @@ function validateGt(value: string, num: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function validateLt(value: string, num: string) {
+    validateFunctionParam('lt', num);
+    return Number(value) < Number(num);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function validateEq(value: string, num: string) {
     validateFunctionParam('eq', num);
     return value.length === Number(num);
@@ -96,7 +102,7 @@ function validateEq(value: string, num: string) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function validatePhone(value: string) {
-    const regex = '^\\+(\\d{11})$';
+    const regex = '^\\+1(\\d{10})$';
     return new RegExp(regex).test(value);
 }
 
@@ -113,6 +119,7 @@ const defaultErrorMessages: Record<string, string> = {
     numeric: 'Field can only contain numbers',
     float: 'Field must be numeric with ##REPLACE## decimals',
     gt: 'Field must be greater than ##REPLACE##',
+    lt: 'Field must be less than ##REPLACE##',
     'has-int': 'Field must contain a number',
     phone: 'Field must be a valid phone number',
 };
