@@ -72,6 +72,42 @@ model Budgets {
   @@map("budgets")
 }
 
+model BudgetAggregation {
+  id         BigInt    @id @default(autoincrement()) @db.BigInt
+  user_id    BigInt    @unique
+  budget_id  BigInt    @unique
+  type       String
+  value      String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("budget_aggregation")
+}
+
+model BudgetTemplate {
+  id         BigInt    @id @default(autoincrement()) @db.BigInt
+  user_id    BigInt    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("budget_template")
+}
+
+model Childcare {
+  id                BigInt  @id @default(autoincrement()) @db.BigInt
+  childcare_type_id BigInt  @unique
+  budget_id         BigInt  @unique
+  name              String
+  amount            String
+  confirmation      String?
+  not_track_amount  Boolean @default(false)
+  notes             String?
+
+  @@map("childcare")
+}
+
 model Users {
   id                        BigInt        @id @default(autoincrement()) @db.BigInt
   email                     String        @unique
