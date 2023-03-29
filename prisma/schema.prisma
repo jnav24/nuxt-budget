@@ -12,38 +12,46 @@ datasource db {
 }
 
 model Bank {
-  id               BigInt    @id @default(autoincrement()) @db.BigInt
+  id               BigInt       @id @default(autoincrement()) @db.BigInt
   name             String
   amount           String
-  bank_template_id BigInt    @default(0)
+  bank_template_id BigInt       @default(0)
+  bank_template    BankTemplate @relation(fields: [bank_template_id], references: [id], onDelete: Cascade)
   bank_type_id     BigInt
+  bank_type        BankType     @relation(fields: [bank_type_id], references: [id], onDelete: Cascade)
   budget_id        BigInt
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+  budget           Budget       @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt
   deleted_at       DateTime?
 
   @@map("banks")
 }
 
 model BankTemplate {
-  id                 BigInt    @id @default(autoincrement()) @db.BigInt
+  id                 BigInt         @id @default(autoincrement()) @db.BigInt
   name               String
   amount             String
-  budget_template_id BigInt
   bank_type_id       BigInt
-  created_at         DateTime  @default(now())
-  updated_at         DateTime  @updatedAt
+  bank_type          BankType       @relation(fields: [bank_type_id], references: [id], onDelete: Cascade)
+  budget_template_id BigInt
+  budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
   deleted_at         DateTime?
+  Bank               Bank[]
 
   @@map("bank_templates")
 }
 
 model BankType {
-  id         BigInt   @id @default(autoincrement()) @db.BigInt
-  name       String
-  slug       String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id           BigInt         @id @default(autoincrement()) @db.BigInt
+  name         String
+  slug         String
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  BankTemplate BankTemplate[]
+  Bank         Bank[]
 
   @@map("bank_types")
 }
@@ -60,22 +68,31 @@ model BillType {
   @@map("bill_types")
 }
 
-model Budgets {
-  id           BigInt   @id @default(autoincrement()) @db.BigInt
-  user_id      BigInt   @unique
-  name         String
-  budget_cycle DateTime
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  user         Users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+model Budget {
+  id                BigInt              @id @default(autoincrement()) @db.BigInt
+  user_id           BigInt              @unique
+  user              User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name              String
+  budget_cycle      DateTime
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  Bank              Bank[]
+  BudgetAggregation BudgetAggregation[]
+  Childcare         Childcare[]
+  CreditCard        CreditCard[]
+  Education         Education[]
+  Entertainment     Entertainment[]
+  Food              Food[]
 
   @@map("budgets")
 }
 
 model BudgetAggregation {
   id         BigInt    @id @default(autoincrement()) @db.BigInt
-  user_id    BigInt    @unique
-  budget_id  BigInt    @unique
+  user_id    BigInt
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  budget_id  BigInt
+  budget     Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   type       String
   value      String
   created_at DateTime  @default(now())
@@ -86,41 +103,279 @@ model BudgetAggregation {
 }
 
 model BudgetTemplate {
-  id         BigInt    @id @default(autoincrement()) @db.BigInt
-  user_id    BigInt    @unique
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  id                    BigInt                  @id @default(autoincrement()) @db.BigInt
+  user_id               BigInt                  @unique
+  user                  User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @updatedAt
+  deleted_at            DateTime?
+  BankTemplate          BankTemplate[]
+  ChildcareTemplate     ChildcareTemplate[]
+  CreditCardTemplate    CreditCardTemplate[]
+  EducationTemplate     EducationTemplate[]
+  EntertainmentTemplate EntertainmentTemplate[]
+  FoodTemplate          FoodTemplate[]
 
   @@map("budget_template")
 }
 
 model Childcare {
-  id                BigInt  @id @default(autoincrement()) @db.BigInt
-  childcare_type_id BigInt  @unique
-  budget_id         BigInt  @unique
+  id                BigInt        @id @default(autoincrement()) @db.BigInt
+  childcare_type_id BigInt
+  childcare_type    ChildcareType @relation(fields: [childcare_type_id], references: [id], onDelete: Cascade)
+  budget_id         BigInt
+  budget            Budget        @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   name              String
   amount            String
   confirmation      String?
-  not_track_amount  Boolean @default(false)
+  not_track_amount  Boolean       @default(false)
   notes             String?
 
   @@map("childcare")
 }
 
-model Users {
-  id                        BigInt        @id @default(autoincrement()) @db.BigInt
-  email                     String        @unique
+model ChildcareTemplate {
+  id                 BigInt         @id @default(autoincrement()) @db.BigInt
+  budget_template_id BigInt
+  budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  childcare_type_id  BigInt
+  childcare_type     ChildcareType  @relation(fields: [childcare_type_id], references: [id], onDelete: Cascade)
+  name               String
+  amount             String
+  due_date           Int            @db.TinyInt
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+  deleted_at         DateTime?
+
+  @@map("childcare_templates")
+}
+
+model ChildcareType {
+  id                BigInt              @id @default(autoincrement()) @db.BigInt
+  name              String
+  slug              String
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  ChildcareTemplate ChildcareTemplate[]
+  Childcare         Childcare[]
+
+  @@map("childcare_types")
+}
+
+model CreditCard {
+  id                  BigInt         @id @default(autoincrement()) @db.BigInt
+  name                String
+  limit               String
+  last_4              String?
+  exp_month           String
+  exp_year            String
+  apr                 String
+  due_date            Int            @db.TinyInt
+  paid_date           DateTime?
+  confirmation        String?
+  amount              String?
+  credit_card_type_id BigInt
+  credit_card_type    CreditCardType @relation(fields: [credit_card_type_id], references: [id], onDelete: Cascade)
+  budget_id           BigInt
+  budget              Budget         @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
+  deleted_at          DateTime?
+
+  @@map("credit_cards")
+}
+
+model CreditCardTemplate {
+  id                  BigInt         @id @default(autoincrement()) @db.BigInt
+  name                String
+  limit               String
+  last_4              String?
+  exp_month           String
+  exp_year            String
+  apr                 String
+  due_date            Int            @db.TinyInt
+  credit_card_type_id BigInt
+  credit_card_type    CreditCardType @relation(fields: [credit_card_type_id], references: [id], onDelete: Cascade)
+  budget_template_id  BigInt
+  budget_template     BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
+  deleted_at          DateTime?
+
+  @@map("credit_card_templates")
+}
+
+model CreditCardType {
+  id                 BigInt               @id @default(autoincrement()) @db.BigInt
+  name               String
+  slug               String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  CreditCard         CreditCard[]
+  CreditCardTemplate CreditCardTemplate[]
+
+  @@map("credit_card_types")
+}
+
+model Education {
+  id                BigInt        @id @default(autoincrement()) @db.BigInt
+  name              String
+  amount            String
+  confirmation      String?
+  notes             String        @db.Text
+  not_track_amount  Boolean       @default(false)
+  due_date          Int           @db.TinyInt
+  paid_date         DateTime?
+  budget_id         BigInt
+  budget            Budget        @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  education_type_id BigInt
+  education_type    EducationType @relation(fields: [education_type_id], references: [id], onDelete: Cascade)
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  deleted_at        DateTime?
+
+  @@map("education")
+}
+
+model EducationTemplate {
+  id                 BigInt         @id @default(autoincrement()) @db.BigInt
+  name               String
+  amount             String
+  due_date           Int            @db.TinyInt
+  budget_template_id BigInt
+  budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  education_type_id  BigInt
+  education_type     EducationType  @relation(fields: [education_type_id], references: [id], onDelete: Cascade)
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+  deleted_at         DateTime?
+
+  @@map("education_templates")
+}
+
+model EducationType {
+  id                BigInt              @id @default(autoincrement()) @db.BigInt
+  name              String
+  slug              String
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  Education         Education[]
+  EducationTemplate EducationTemplate[]
+
+  @@map("education_types")
+}
+
+model Entertainment {
+  id                    BigInt            @id @default(autoincrement()) @db.BigInt
+  name                  String
+  amount                String
+  confirmation          String?
+  notes                 String            @db.Text
+  not_track_amount      Boolean           @default(false)
+  due_date              Int               @db.TinyInt
+  paid_date             DateTime?
+  budget_id             BigInt
+  budget                Budget            @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  entertainment_type_id BigInt
+  entertainment_type    EntertainmentType @relation(fields: [entertainment_type_id], references: [id], onDelete: Cascade)
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt
+  deleted_at            DateTime?
+
+  @@map("entertainment")
+}
+
+model EntertainmentTemplate {
+  id                    BigInt            @id @default(autoincrement()) @db.BigInt
+  name                  String
+  amount                String
+  due_date              Int               @db.TinyInt
+  budget_template_id    BigInt
+  budget_template       BudgetTemplate    @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  entertainment_type_id BigInt
+  entertainment_type    EntertainmentType @relation(fields: [entertainment_type_id], references: [id], onDelete: Cascade)
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt
+  deleted_at            DateTime?
+
+  @@map("entertainment_templates")
+}
+
+model EntertainmentType {
+  id                    BigInt                  @id @default(autoincrement()) @db.BigInt
+  name                  String
+  slug                  String
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @updatedAt
+  Entertainment         Entertainment[]
+  EntertainmentTemplate EntertainmentTemplate[]
+
+  @@map("entertainment_types")
+}
+
+model Food {
+  id               BigInt    @id @default(autoincrement()) @db.BigInt
+  name             String
+  amount           String
+  confirmation     String?
+  notes            String    @db.Text
+  not_track_amount Boolean   @default(false)
+  due_date         Int       @db.TinyInt
+  paid_date        DateTime?
+  budget_id        BigInt
+  budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
+  food_type_id     BigInt
+  food_type        FoodType  @relation(fields: [food_type_id], references: [id], onDelete: Cascade)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  deleted_at       DateTime?
+
+  @@map("food")
+}
+
+model FoodTemplate {
+  id                 BigInt         @id @default(autoincrement()) @db.BigInt
+  name               String
+  amount             String
+  due_date           Int            @db.TinyInt
+  budget_template_id BigInt
+  budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
+  food_type_id       BigInt
+  food_type          FoodType       @relation(fields: [food_type_id], references: [id], onDelete: Cascade)
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+  deleted_at         DateTime?
+
+  @@map("food_templates")
+}
+
+model FoodType {
+  id           BigInt         @id @default(autoincrement()) @db.BigInt
+  name         String
+  slug         String
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  Food         Food[]
+  FoodTemplate FoodTemplate[]
+
+  @@map("food_types")
+}
+
+model User {
+  id                        BigInt              @id @default(autoincrement()) @db.BigInt
+  email                     String              @unique
   password                  String
   two_factor_secret         String?
   two_factor_recovery_codes String?
   remember_token            String?
   email_verified_at         DateTime?
-  created_at                DateTime      @default(now())
-  updated_at                DateTime      @updatedAt
+  created_at                DateTime            @default(now())
+  updated_at                DateTime            @updatedAt
   UserProfile               UserProfile?
-  UserVehicles              UserVehicles?
-  Budgets                   Budgets?
+  UserVehicles              UserVehicles[]
+  Budgets                   Budget[]
+  BudgetAggregation         BudgetAggregation[]
+  BudgetTemplate            BudgetTemplate?
 
   @@map("users")
 }
@@ -128,28 +383,29 @@ model Users {
 model UserProfile {
   id         BigInt   @id @default(autoincrement()) @db.BigInt
   user_id    BigInt   @unique
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   first_name String
   last_name  String
   image      String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user       Users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("user_profile")
 }
 
 model UserVehicles {
-  id         BigInt   @id @default(autoincrement()) @db.BigInt
-  user_id    BigInt   @unique
+  id         BigInt    @id @default(autoincrement()) @db.BigInt
+  user_id    BigInt
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   make       String
   model      String
   year       String
   color      String
   license    String?
-  active     Boolean  @default(true)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  user       Users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  active     Boolean   @default(true)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
   @@map("user_vehicles")
 }
