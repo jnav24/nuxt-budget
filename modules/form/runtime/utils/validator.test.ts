@@ -1,7 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { validateInput, validateRequest, validateRules } from './validator';
 
-// describe('validate input', () => {});
+describe('validate input', () => {
+    it('should throw a budget error when value is not numeric', () => {
+        expect(() => validateInput('max', 'chicken')).toThrowError(
+            'The param for the validation rule, max, must be numeric',
+        );
+    });
+
+    it('should throw an error when validation function does not exist', () => {
+        expect(() => validateInput('nonexistent', '11')).toThrowError(
+            "Function for type 'nonexistent', does not exist",
+        );
+    });
+});
 
 describe('validate request', () => {
     it('should not throw a validation error', () => {
@@ -16,9 +28,9 @@ describe('validate request', () => {
         expect(() => validateRequest(input, { name: ['required'] })).toThrowError(
             /Validation error/,
         );
-        expect(() => validateRequest(input, { name: ['required'] })).toThrowErrorMatchingSnapshot(
-            'Validation errors',
-        );
+        expect(() =>
+            validateRequest(input, { name: ['required'] }),
+        ).toThrowErrorMatchingInlineSnapshot('"Validation error"');
     });
 });
 
