@@ -1,3 +1,5 @@
+const lcFirst = (val: string): string => val.charAt(0).toLowerCase() + val.slice(1);
+
 const ucFirst = (val: string): string => val.charAt(0).toUpperCase() + val.slice(1);
 
 const arrayColumn = <
@@ -10,7 +12,7 @@ const arrayColumn = <
     return arr.map((obj: R) => obj[val] ?? null).filter((value: R[S]) => value);
 };
 
-const camelCase = (value: string): string => {
+const toCamelCase = (value: string): string => {
     const delimList: string[] = ['_', '-'];
     let result = value;
 
@@ -32,6 +34,14 @@ const camelCase = (value: string): string => {
 
     return result;
 };
+
+const toKebabCase = (value: string) =>
+    lcFirst(value).replace(/[A-Z]/, (str) => `-${str.toLowerCase()}`);
+
+const toSnakeCase = (value: string) =>
+    lcFirst(value).replace(/[A-Z]/, (str) => `_${str.toLowerCase()}`);
+
+const toPascalCase = (value: string) => ucFirst(toCamelCase(value));
 
 const toTitleCase = (value: string, casing = '-'): string => {
     return value
@@ -66,4 +76,15 @@ const getErrorMessage = (err: string | Error | unknown) => {
     return err;
 };
 
-export { arrayColumn, camelCase, toTitleCase, sortObject, ucFirst, randomString, getErrorMessage };
+export {
+    arrayColumn,
+    toCamelCase,
+    toKebabCase,
+    toPascalCase,
+    toSnakeCase,
+    toTitleCase,
+    sortObject,
+    ucFirst,
+    randomString,
+    getErrorMessage,
+};
