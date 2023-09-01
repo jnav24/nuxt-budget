@@ -13,6 +13,7 @@ datasource db {
 
 model Bank {
   id               BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String       @unique @default(uuid())
   name             String
   amount           String
   bank_template_id BigInt       @db.UnsignedBigInt
@@ -30,6 +31,7 @@ model Bank {
 
 model BankTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   bank_type_id       BigInt         @db.UnsignedBigInt
@@ -46,6 +48,7 @@ model BankTemplate {
 
 model BankType {
   id           BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid         String         @unique @default(uuid())
   name         String
   slug         String
   created_at   DateTime       @default(now())
@@ -58,6 +61,7 @@ model BankType {
 
 model BillType {
   id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique @default(uuid())
   name       String
   slug       String
   save_type  Boolean  @default(false)
@@ -70,6 +74,7 @@ model BillType {
 
 model Budget {
   id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid              String              @unique @default(uuid())
   user_id           BigInt              @unique @db.UnsignedBigInt
   user              User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
   name              String
@@ -103,6 +108,7 @@ model Budget {
 
 model BudgetAggregation {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String    @unique @default(uuid())
   user_id    BigInt    @db.UnsignedBigInt
   user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   budget_id  BigInt    @db.UnsignedBigInt
@@ -118,6 +124,7 @@ model BudgetAggregation {
 
 model BudgetTemplate {
   id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                  String                  @unique @default(uuid())
   user_id               BigInt                  @unique @db.UnsignedBigInt
   user                  User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   created_at            DateTime                @default(now())
@@ -149,6 +156,7 @@ model BudgetTemplate {
 
 model Childcare {
   id                BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid              String        @unique @default(uuid())
   childcare_type_id BigInt        @db.UnsignedBigInt
   childcare_type    ChildcareType @relation(fields: [childcare_type_id], references: [id], onDelete: Cascade)
   budget_id         BigInt        @db.UnsignedBigInt
@@ -164,6 +172,7 @@ model Childcare {
 
 model ChildcareTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
   childcare_type_id  BigInt         @db.UnsignedBigInt
@@ -180,6 +189,7 @@ model ChildcareTemplate {
 
 model ChildcareType {
   id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid              String              @unique @default(uuid())
   name              String
   slug              String
   created_at        DateTime            @default(now())
@@ -192,6 +202,7 @@ model ChildcareType {
 
 model CreditCard {
   id                  BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                String         @unique @default(uuid())
   name                String
   limit               String
   last_4              String?
@@ -215,6 +226,7 @@ model CreditCard {
 
 model CreditCardTemplate {
   id                  BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                String         @unique @default(uuid())
   name                String
   limit               String
   last_4              String?
@@ -235,6 +247,7 @@ model CreditCardTemplate {
 
 model CreditCardType {
   id                 BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String               @unique @default(uuid())
   name               String
   slug               String
   created_at         DateTime             @default(now())
@@ -247,6 +260,7 @@ model CreditCardType {
 
 model Education {
   id                BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid              String        @unique @default(uuid())
   name              String
   amount            String
   confirmation      String?
@@ -267,6 +281,7 @@ model Education {
 
 model EducationTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -283,6 +298,7 @@ model EducationTemplate {
 
 model EducationType {
   id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid              String              @unique @default(uuid())
   name              String
   slug              String
   created_at        DateTime            @default(now())
@@ -295,6 +311,7 @@ model EducationType {
 
 model Entertainment {
   id                    BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                  String            @unique @default(uuid())
   name                  String
   amount                String
   confirmation          String?
@@ -315,6 +332,7 @@ model Entertainment {
 
 model EntertainmentTemplate {
   id                    BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                  String            @unique @default(uuid())
   name                  String
   amount                String
   due_date              Int               @db.TinyInt
@@ -331,6 +349,7 @@ model EntertainmentTemplate {
 
 model EntertainmentType {
   id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                  String                  @unique @default(uuid())
   name                  String
   slug                  String
   created_at            DateTime                @default(now())
@@ -343,6 +362,7 @@ model EntertainmentType {
 
 model Food {
   id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String    @unique @default(uuid())
   name             String
   amount           String
   confirmation     String?
@@ -363,6 +383,7 @@ model Food {
 
 model FoodTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -379,6 +400,7 @@ model FoodTemplate {
 
 model FoodType {
   id           BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid         String         @unique @default(uuid())
   name         String
   slug         String
   created_at   DateTime       @default(now())
@@ -391,6 +413,7 @@ model FoodType {
 
 model Gift {
   id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String    @unique @default(uuid())
   name             String
   amount           String
   confirmation     String?
@@ -411,6 +434,7 @@ model Gift {
 
 model GiftTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -427,6 +451,7 @@ model GiftTemplate {
 
 model GiftType {
   id           BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid         String         @unique @default(uuid())
   name         String
   slug         String
   created_at   DateTime       @default(now())
@@ -439,6 +464,7 @@ model GiftType {
 
 model Housing {
   id               BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String      @unique @default(uuid())
   name             String
   amount           String
   confirmation     String?
@@ -459,6 +485,7 @@ model Housing {
 
 model HousingTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -475,6 +502,7 @@ model HousingTemplate {
 
 model HousingType {
   id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid            String            @unique @default(uuid())
   name            String
   slug            String
   created_at      DateTime          @default(now())
@@ -487,6 +515,7 @@ model HousingType {
 
 model Income {
   id               BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String     @unique @default(uuid())
   name             String
   amount           String
   budget_id        BigInt     @db.UnsignedBigInt
@@ -503,6 +532,7 @@ model Income {
 
 model IncomeTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   budget_template_id BigInt         @db.UnsignedBigInt
@@ -519,6 +549,7 @@ model IncomeTemplate {
 
 model IncomeType {
   id             BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid           String           @unique @default(uuid())
   name           String
   slug           String
   created_at     DateTime         @default(now())
@@ -531,6 +562,7 @@ model IncomeType {
 
 model Investment {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   budget_id          BigInt         @db.UnsignedBigInt
@@ -546,6 +578,7 @@ model Investment {
 
 model InvestmentTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   budget_template_id BigInt         @db.UnsignedBigInt
@@ -561,6 +594,7 @@ model InvestmentTemplate {
 
 model InvestmentType {
   id                 BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String               @unique @default(uuid())
   name               String
   slug               String
   created_at         DateTime             @default(now())
@@ -573,6 +607,7 @@ model InvestmentType {
 
 model Loan {
   id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String    @unique @default(uuid())
   name             String
   amount           String
   due_date         Int       @db.TinyInt
@@ -592,6 +627,7 @@ model Loan {
 
 model LoanTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -608,6 +644,7 @@ model LoanTemplate {
 
 model LoanType {
   id           BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid         String         @unique @default(uuid())
   name         String
   slug         String
   created_at   DateTime       @default(now())
@@ -620,6 +657,7 @@ model LoanType {
 
 model Medical {
   id               BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String      @unique @default(uuid())
   name             String
   amount           String
   due_date         Int         @db.TinyInt
@@ -640,6 +678,7 @@ model Medical {
 
 model MedicalTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -656,6 +695,7 @@ model MedicalTemplate {
 
 model MedicalType {
   id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid            String            @unique @default(uuid())
   name            String
   slug            String
   created_at      DateTime          @default(now())
@@ -668,6 +708,7 @@ model MedicalType {
 
 model Miscellaneous {
   id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String    @unique @default(uuid())
   name             String
   amount           String
   due_date         Int       @db.TinyInt
@@ -686,6 +727,7 @@ model Miscellaneous {
 
 model MiscellaneousTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -710,6 +752,7 @@ model PasswordReset {
 
 model Personal {
   id               BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String       @unique @default(uuid())
   name             String
   amount           String
   due_date         Int          @db.TinyInt
@@ -730,6 +773,7 @@ model Personal {
 
 model PersonalTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -746,6 +790,7 @@ model PersonalTemplate {
 
 model PersonalType {
   id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String             @unique @default(uuid())
   name             String
   slug             String
   created_at       DateTime           @default(now())
@@ -758,6 +803,7 @@ model PersonalType {
 
 model Shopping {
   id               BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String       @unique @default(uuid())
   name             String
   amount           String
   due_date         Int          @db.TinyInt
@@ -778,6 +824,7 @@ model Shopping {
 
 model ShoppingTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -794,6 +841,7 @@ model ShoppingTemplate {
 
 model ShoppingType {
   id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String             @unique @default(uuid())
   name             String
   slug             String
   created_at       DateTime           @default(now())
@@ -806,6 +854,7 @@ model ShoppingType {
 
 model Subscription {
   id                   BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                 String           @unique @default(uuid())
   name                 String
   amount               String
   due_date             Int              @db.TinyInt
@@ -826,6 +875,7 @@ model Subscription {
 
 model SubscriptionTemplate {
   id                   BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                 String           @unique @default(uuid())
   name                 String
   amount               String
   due_date             Int              @db.TinyInt
@@ -842,6 +892,7 @@ model SubscriptionTemplate {
 
 model SubscriptionType {
   id                   BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                 String                 @unique @default(uuid())
   name                 String
   slug                 String
   created_at           DateTime               @default(now())
@@ -854,6 +905,7 @@ model SubscriptionType {
 
 model Tax {
   id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String    @unique @default(uuid())
   name             String
   amount           String
   due_date         Int       @db.TinyInt
@@ -874,6 +926,7 @@ model Tax {
 
 model TaxTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -890,6 +943,7 @@ model TaxTemplate {
 
 model TaxType {
   id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid        String        @unique @default(uuid())
   name        String
   slug        String
   created_at  DateTime      @default(now())
@@ -902,6 +956,7 @@ model TaxType {
 
 model Travel {
   id               BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String     @unique @default(uuid())
   name             String
   amount           String
   due_date         Int        @db.TinyInt
@@ -922,6 +977,7 @@ model Travel {
 
 model TravelTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -938,6 +994,7 @@ model TravelTemplate {
 
 model TravelType {
   id             BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid           String           @unique @default(uuid())
   name           String
   slug           String
   created_at     DateTime         @default(now())
@@ -950,6 +1007,7 @@ model TravelType {
 
 model User {
   id                        BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid                      String              @unique @default(uuid())
   email                     String              @unique
   password                  String
   two_factor_secret         String?
@@ -969,6 +1027,7 @@ model User {
 
 model UserProfile {
   id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique @default(uuid())
   user_id    BigInt   @unique @db.UnsignedBigInt
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   first_name String
@@ -982,6 +1041,7 @@ model UserProfile {
 
 model UserVehicles {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String    @unique @default(uuid())
   user_id    BigInt    @db.UnsignedBigInt
   user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   make       String
@@ -999,6 +1059,7 @@ model UserVehicles {
 
 model Utility {
   id               BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String      @unique @default(uuid())
   name             String
   amount           String
   due_date         Int         @db.TinyInt
@@ -1019,6 +1080,7 @@ model Utility {
 
 model UtilityTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -1035,6 +1097,7 @@ model UtilityTemplate {
 
 model UtilityType {
   id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid            String            @unique @default(uuid())
   name            String
   slug            String
   created_at      DateTime          @default(now())
@@ -1047,6 +1110,7 @@ model UtilityType {
 
 model Vehicle {
   id               BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid             String      @unique @default(uuid())
   name             String
   amount           String
   due_date         Int         @db.TinyInt
@@ -1067,6 +1131,7 @@ model Vehicle {
 
 model VehicleTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid               String         @unique @default(uuid())
   name               String
   amount             String
   due_date           Int            @db.TinyInt
@@ -1083,6 +1148,7 @@ model VehicleTemplate {
 
 model VehicleType {
   id              BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid            String            @unique @default(uuid())
   name            String
   slug            String
   created_at      DateTime          @default(now())
