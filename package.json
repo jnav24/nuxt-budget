@@ -16,6 +16,7 @@
     "@graphql-codegen/cli": "^2.16.4",
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-operations": "^2.5.12",
+    "@nuxt/devtools": "^0.8.2",
     "@vitest/coverage-c8": "^0.28.5",
     "autoprefixer": "^10.4.13",
     "nuxt": "^3.7.0",
@@ -29,6 +30,8 @@
     "vitest": "^0.34.3"
   },
   "dependencies": {
+    "@apollo/server": "^4.9.3",
+    "@as-integrations/h3": "^1.1.6",
     "@pothos/core": "^3.33.0",
     "@pothos/plugin-dataloader": "^3.17.1",
     "@pothos/plugin-prisma": "^3.58.0",
@@ -39,9 +42,10 @@
     "@types/request-ip": "^0.0.37",
     "date-fns": "^2.29.3",
     "date-fns-tz": "^2.0.0",
-    "graphql": "^16.6.0",
-    "graphql-yoga": "^3.4.0",
+    "graphql": "^16.8.0",
+    "graphql-yoga": "^4.0.4",
     "ioredis": "^5.2.5",
+    "nuxt-graphql-server": "^2.0.1",
     "request-ip": "^3.3.0"
   }
 }
