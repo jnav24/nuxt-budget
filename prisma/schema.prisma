@@ -15,11 +15,11 @@ model Bank {
   id               BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
   name             String
   amount           String
-  bank_template_id BigInt       @default(0)
+  bank_template_id BigInt       @db.UnsignedBigInt
   bank_template    BankTemplate @relation(fields: [bank_template_id], references: [id], onDelete: Cascade)
-  bank_type_id     BigInt
+  bank_type_id     BigInt       @db.UnsignedBigInt
   bank_type        BankType     @relation(fields: [bank_type_id], references: [id], onDelete: Cascade)
-  budget_id        BigInt
+  budget_id        BigInt       @db.UnsignedBigInt
   budget           Budget       @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt
@@ -32,9 +32,9 @@ model BankTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
   name               String
   amount             String
-  bank_type_id       BigInt
+  bank_type_id       BigInt         @db.UnsignedBigInt
   bank_type          BankType       @relation(fields: [bank_type_id], references: [id], onDelete: Cascade)
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -70,7 +70,7 @@ model BillType {
 
 model Budget {
   id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id           BigInt              @unique
+  user_id           BigInt              @unique @db.UnsignedBigInt
   user              User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
   name              String
   budget_cycle      DateTime
@@ -103,9 +103,9 @@ model Budget {
 
 model BudgetAggregation {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id    BigInt
+  user_id    BigInt    @db.UnsignedBigInt
   user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  budget_id  BigInt
+  budget_id  BigInt    @db.UnsignedBigInt
   budget     Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   type       String
   value      String
@@ -118,7 +118,7 @@ model BudgetAggregation {
 
 model BudgetTemplate {
   id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id               BigInt                  @unique
+  user_id               BigInt                  @unique @db.UnsignedBigInt
   user                  User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
@@ -149,9 +149,9 @@ model BudgetTemplate {
 
 model Childcare {
   id                BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
-  childcare_type_id BigInt
+  childcare_type_id BigInt        @db.UnsignedBigInt
   childcare_type    ChildcareType @relation(fields: [childcare_type_id], references: [id], onDelete: Cascade)
-  budget_id         BigInt
+  budget_id         BigInt        @db.UnsignedBigInt
   budget            Budget        @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   name              String
   amount            String
@@ -164,9 +164,9 @@ model Childcare {
 
 model ChildcareTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  childcare_type_id  BigInt
+  childcare_type_id  BigInt         @db.UnsignedBigInt
   childcare_type     ChildcareType  @relation(fields: [childcare_type_id], references: [id], onDelete: Cascade)
   name               String
   amount             String
@@ -202,9 +202,9 @@ model CreditCard {
   paid_date           DateTime?
   confirmation        String?
   amount              String?
-  credit_card_type_id BigInt
+  credit_card_type_id BigInt         @db.UnsignedBigInt
   credit_card_type    CreditCardType @relation(fields: [credit_card_type_id], references: [id], onDelete: Cascade)
-  budget_id           BigInt
+  budget_id           BigInt         @db.UnsignedBigInt
   budget              Budget         @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   created_at          DateTime       @default(now())
   updated_at          DateTime       @updatedAt
@@ -222,9 +222,9 @@ model CreditCardTemplate {
   exp_year            String
   apr                 String
   due_date            Int            @db.TinyInt
-  credit_card_type_id BigInt
+  credit_card_type_id BigInt         @db.UnsignedBigInt
   credit_card_type    CreditCardType @relation(fields: [credit_card_type_id], references: [id], onDelete: Cascade)
-  budget_template_id  BigInt
+  budget_template_id  BigInt         @db.UnsignedBigInt
   budget_template     BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
   created_at          DateTime       @default(now())
   updated_at          DateTime       @updatedAt
@@ -254,9 +254,9 @@ model Education {
   not_track_amount  Boolean       @default(false)
   due_date          Int           @db.TinyInt
   paid_date         DateTime?
-  budget_id         BigInt
+  budget_id         BigInt        @db.UnsignedBigInt
   budget            Budget        @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  education_type_id BigInt
+  education_type_id BigInt        @db.UnsignedBigInt
   education_type    EducationType @relation(fields: [education_type_id], references: [id], onDelete: Cascade)
   created_at        DateTime      @default(now())
   updated_at        DateTime      @updatedAt
@@ -270,9 +270,9 @@ model EducationTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  education_type_id  BigInt
+  education_type_id  BigInt         @db.UnsignedBigInt
   education_type     EducationType  @relation(fields: [education_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -302,9 +302,9 @@ model Entertainment {
   not_track_amount      Boolean           @default(false)
   due_date              Int               @db.TinyInt
   paid_date             DateTime?
-  budget_id             BigInt
+  budget_id             BigInt            @db.UnsignedBigInt
   budget                Budget            @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  entertainment_type_id BigInt
+  entertainment_type_id BigInt            @db.UnsignedBigInt
   entertainment_type    EntertainmentType @relation(fields: [entertainment_type_id], references: [id], onDelete: Cascade)
   created_at            DateTime          @default(now())
   updated_at            DateTime          @updatedAt
@@ -318,9 +318,9 @@ model EntertainmentTemplate {
   name                  String
   amount                String
   due_date              Int               @db.TinyInt
-  budget_template_id    BigInt
+  budget_template_id    BigInt            @db.UnsignedBigInt
   budget_template       BudgetTemplate    @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  entertainment_type_id BigInt
+  entertainment_type_id BigInt            @db.UnsignedBigInt
   entertainment_type    EntertainmentType @relation(fields: [entertainment_type_id], references: [id], onDelete: Cascade)
   created_at            DateTime          @default(now())
   updated_at            DateTime          @updatedAt
@@ -350,9 +350,9 @@ model Food {
   not_track_amount Boolean   @default(false)
   due_date         Int       @db.TinyInt
   paid_date        DateTime?
-  budget_id        BigInt
+  budget_id        BigInt    @db.UnsignedBigInt
   budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  food_type_id     BigInt
+  food_type_id     BigInt    @db.UnsignedBigInt
   food_type        FoodType  @relation(fields: [food_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
@@ -366,9 +366,9 @@ model FoodTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  food_type_id       BigInt
+  food_type_id       BigInt         @db.UnsignedBigInt
   food_type          FoodType       @relation(fields: [food_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -398,9 +398,9 @@ model Gift {
   not_track_amount Boolean   @default(false)
   due_date         Int       @db.TinyInt
   paid_date        DateTime?
-  budget_id        BigInt
+  budget_id        BigInt    @db.UnsignedBigInt
   budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  gift_type_id     BigInt
+  gift_type_id     BigInt    @db.UnsignedBigInt
   gift_type        GiftType  @relation(fields: [gift_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
@@ -414,9 +414,9 @@ model GiftTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  gift_type_id       BigInt
+  gift_type_id       BigInt         @db.UnsignedBigInt
   gift_type          GiftType       @relation(fields: [gift_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -446,9 +446,9 @@ model Housing {
   not_track_amount Boolean     @default(false)
   due_date         Int         @db.TinyInt
   paid_date        DateTime?
-  budget_id        BigInt
+  budget_id        BigInt      @db.UnsignedBigInt
   budget           Budget      @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  housing_type_id  BigInt
+  housing_type_id  BigInt      @db.UnsignedBigInt
   housing_type     HousingType @relation(fields: [housing_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
@@ -462,9 +462,9 @@ model HousingTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  housing_type_id    BigInt
+  housing_type_id    BigInt         @db.UnsignedBigInt
   housing_type       HousingType    @relation(fields: [housing_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -489,9 +489,9 @@ model Income {
   id               BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
   name             String
   amount           String
-  budget_id        BigInt
+  budget_id        BigInt     @db.UnsignedBigInt
   budget           Budget     @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  income_type_id   BigInt
+  income_type_id   BigInt     @db.UnsignedBigInt
   income_type      IncomeType @relation(fields: [income_type_id], references: [id], onDelete: Cascade)
   initial_pay_date DateTime
   created_at       DateTime   @default(now())
@@ -505,9 +505,9 @@ model IncomeTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
   name               String
   amount             String
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  income_type_id     BigInt
+  income_type_id     BigInt         @db.UnsignedBigInt
   income_type        IncomeType     @relation(fields: [income_type_id], references: [id], onDelete: Cascade)
   initial_pay_date   DateTime
   created_at         DateTime       @default(now())
@@ -533,9 +533,9 @@ model Investment {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
   name               String
   amount             String
-  budget_id          BigInt
+  budget_id          BigInt         @db.UnsignedBigInt
   budget             Budget         @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  investment_type_id BigInt
+  investment_type_id BigInt         @db.UnsignedBigInt
   investment_type    InvestmentType @relation(fields: [investment_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -548,9 +548,9 @@ model InvestmentTemplate {
   id                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
   name               String
   amount             String
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  investment_type_id BigInt
+  investment_type_id BigInt         @db.UnsignedBigInt
   investment_type    InvestmentType @relation(fields: [investment_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -579,9 +579,9 @@ model Loan {
   paid_date        DateTime?
   confirmation     String?
   not_track_amount Boolean   @default(false)
-  budget_id        BigInt
+  budget_id        BigInt    @db.UnsignedBigInt
   budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  loan_type_id     BigInt
+  loan_type_id     BigInt    @db.UnsignedBigInt
   loan_type        LoanType  @relation(fields: [loan_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
@@ -595,9 +595,9 @@ model LoanTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  loan_type_id       BigInt
+  loan_type_id       BigInt         @db.UnsignedBigInt
   loan_type          LoanType       @relation(fields: [loan_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -627,9 +627,9 @@ model Medical {
   paid_date        DateTime?
   confirmation     String?
   not_track_amount Boolean     @default(false)
-  budget_id        BigInt
+  budget_id        BigInt      @db.UnsignedBigInt
   budget           Budget      @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  medical_type_id  BigInt
+  medical_type_id  BigInt      @db.UnsignedBigInt
   medical_type     MedicalType @relation(fields: [medical_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
@@ -643,9 +643,9 @@ model MedicalTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  medical_type_id    BigInt
+  medical_type_id    BigInt         @db.UnsignedBigInt
   medical_type       MedicalType    @relation(fields: [medical_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -675,7 +675,7 @@ model Miscellaneous {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt    @db.UnsignedBigInt
   budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
@@ -690,7 +690,7 @@ model MiscellaneousTemplate {
   amount             String
   due_date           Int            @db.TinyInt
   not_track_amount   Boolean        @default(false)
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -717,9 +717,9 @@ model Personal {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt       @db.UnsignedBigInt
   budget           Budget       @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  personal_type_id BigInt
+  personal_type_id BigInt       @db.UnsignedBigInt
   personal_type    PersonalType @relation(fields: [personal_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt
@@ -733,9 +733,9 @@ model PersonalTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  personal_type_id   BigInt
+  personal_type_id   BigInt         @db.UnsignedBigInt
   personal_type      PersonalType   @relation(fields: [personal_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -765,9 +765,9 @@ model Shopping {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt       @db.UnsignedBigInt
   budget           Budget       @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  shopping_type_id BigInt
+  shopping_type_id BigInt       @db.UnsignedBigInt
   shopping_type    ShoppingType @relation(fields: [shopping_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt
@@ -781,9 +781,9 @@ model ShoppingTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  shopping_type_id   BigInt
+  shopping_type_id   BigInt         @db.UnsignedBigInt
   shopping_type      ShoppingType   @relation(fields: [shopping_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -813,9 +813,9 @@ model Subscription {
   paid_date            DateTime?
   confirmation         String?
   notes                String?
-  budget_id            BigInt
+  budget_id            BigInt           @db.UnsignedBigInt
   budget               Budget           @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  subscription_type_id BigInt
+  subscription_type_id BigInt           @db.UnsignedBigInt
   subscription_type    SubscriptionType @relation(fields: [subscription_type_id], references: [id], onDelete: Cascade)
   created_at           DateTime         @default(now())
   updated_at           DateTime         @updatedAt
@@ -829,9 +829,9 @@ model SubscriptionTemplate {
   name                 String
   amount               String
   due_date             Int              @db.TinyInt
-  budget_template_id   BigInt
+  budget_template_id   BigInt           @db.UnsignedBigInt
   budget_template      BudgetTemplate   @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  subscription_type_id BigInt
+  subscription_type_id BigInt           @db.UnsignedBigInt
   subscription_type    SubscriptionType @relation(fields: [subscription_type_id], references: [id], onDelete: Cascade)
   created_at           DateTime         @default(now())
   updated_at           DateTime         @updatedAt
@@ -861,9 +861,9 @@ model Tax {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt    @db.UnsignedBigInt
   budget           Budget    @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  tax_type_id      BigInt
+  tax_type_id      BigInt    @db.UnsignedBigInt
   tax_type         TaxType   @relation(fields: [tax_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
@@ -877,9 +877,9 @@ model TaxTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  tax_type_id        BigInt
+  tax_type_id        BigInt         @db.UnsignedBigInt
   tax_type           TaxType        @relation(fields: [tax_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -909,9 +909,9 @@ model Travel {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt     @db.UnsignedBigInt
   budget           Budget     @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  travel_type_id   BigInt
+  travel_type_id   BigInt     @db.UnsignedBigInt
   travel_type      TravelType @relation(fields: [travel_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime   @default(now())
   updated_at       DateTime   @updatedAt
@@ -925,9 +925,9 @@ model TravelTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  travel_type_id     BigInt
+  travel_type_id     BigInt         @db.UnsignedBigInt
   travel_type        TravelType     @relation(fields: [travel_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -969,7 +969,7 @@ model User {
 
 model UserProfile {
   id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id    BigInt   @unique
+  user_id    BigInt   @unique @db.UnsignedBigInt
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   first_name String
   last_name  String
@@ -982,7 +982,7 @@ model UserProfile {
 
 model UserVehicles {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  user_id    BigInt
+  user_id    BigInt    @db.UnsignedBigInt
   user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   make       String
   model      String
@@ -1006,9 +1006,9 @@ model Utility {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt      @db.UnsignedBigInt
   budget           Budget      @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  utility_type_id  BigInt
+  utility_type_id  BigInt      @db.UnsignedBigInt
   utility_type     UtilityType @relation(fields: [utility_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
@@ -1022,9 +1022,9 @@ model UtilityTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  utility_type_id    BigInt
+  utility_type_id    BigInt         @db.UnsignedBigInt
   utility_type       UtilityType    @relation(fields: [utility_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
@@ -1054,9 +1054,9 @@ model Vehicle {
   paid_date        DateTime?
   confirmation     String?
   notes            String?
-  budget_id        BigInt
+  budget_id        BigInt      @db.UnsignedBigInt
   budget           Budget      @relation(fields: [budget_id], references: [id], onDelete: Cascade)
-  vehicle_type_id  BigInt
+  vehicle_type_id  BigInt      @db.UnsignedBigInt
   vehicle_type     VehicleType @relation(fields: [vehicle_type_id], references: [id], onDelete: Cascade)
   created_at       DateTime    @default(now())
   updated_at       DateTime    @updatedAt
@@ -1070,9 +1070,9 @@ model VehicleTemplate {
   name               String
   amount             String
   due_date           Int            @db.TinyInt
-  budget_template_id BigInt
+  budget_template_id BigInt         @db.UnsignedBigInt
   budget_template    BudgetTemplate @relation(fields: [budget_template_id], references: [id], onDelete: Cascade)
-  vehicle_type_id    BigInt
+  vehicle_type_id    BigInt         @db.UnsignedBigInt
   vehicle_type       VehicleType    @relation(fields: [vehicle_type_id], references: [id], onDelete: Cascade)
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
