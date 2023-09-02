@@ -51,7 +51,11 @@ const setRedisClient = (configKey: keyof RedisConfig, type: RedisDB) => {
     return redis;
 };
 
+/**
+ * @Note
+ * Any changes to the export, have to be made in the `module.ts` file.
+ */
 export const useRedis = () => ({
-    session: global.__primary || setRedisClient('primary', RedisDB.SESSION),
-    sessionReplica: global.__replica1 || setRedisClient('replica1', RedisDB.SESSION),
+    sessionWrite: global.__primary || setRedisClient('primary', RedisDB.SESSION),
+    sessionRead: global.__replica1 || setRedisClient('replica1', RedisDB.SESSION),
 });
