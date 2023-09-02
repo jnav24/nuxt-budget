@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    devtools: { enabled: true },
     app: {
         head: {
             link: [{ rel: 'icon', href: 'https://dimebudget.app/favicon.ico' }],
@@ -14,10 +15,11 @@ export default defineNuxtConfig({
         },
     },
     css: ['~/assets/css/main.css'],
-    modules: [
-        ['./modules/db/module'],
-        ['./modules/form/module'],
-    ],
+    modules: ['./modules/db/module', './modules/form/module', 'nuxt-graphql-server'],
+    graphqlServer: {
+        schema: './server/graphql/generated/schema.graphql',
+        url: '/api/graphql',
+    },
     postcss: {
         plugins: {
             tailwindcss: {},
