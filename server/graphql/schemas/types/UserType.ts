@@ -1,9 +1,10 @@
 import { builder } from '~/server/graphql/builder';
 
 const setBuilder = (pothos: typeof builder) => {
-    pothos.prismaObject('Users', {
+    pothos.prismaObject('User', {
         findUnique: (user) => ({ id: user.id }),
         fields: (t) => ({
+            id: t.exposeString('uuid'),
             email: t.exposeString('email'),
         }),
     });
