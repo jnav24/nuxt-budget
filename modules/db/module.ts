@@ -36,11 +36,11 @@ export default defineNuxtModule<ModuleOptions>({
                     "import { PrismaClient } from '@prisma/client'",
                     "import { Redis } from 'ioredis'",
                     'interface BudgetDatabase { db: PrismaClient }',
-                    'interface BudgetDatastore { sessionWrite: Redis; sessionRead: Redis; }',
+                    'interface BudgetDatastore { session: Redis; sessionRead: Redis; }',
                     `const useDatabase: () => BudgetDatabase = import('${resolve(
                         './runtime/server/services',
                     )}').useDatabase`,
-                    `const useDatastore: () => BudgetDatastore = import('${resolve(
+                    `const useRedis: () => BudgetDatastore = import('${resolve(
                         './runtime/server/services',
                     )}').useRedis`,
                     '}',
