@@ -1,12 +1,12 @@
 import { createYoga } from 'graphql-yoga';
-import { createGraphQLContext } from '~/graphql/builder';
+import { createGraphQLContext } from '~/server/graphql/builder';
 import { H3Event } from 'h3';
-import { GraphQLRequest, isDevelopment, shouldRenderGraphiQL } from '~/utils/graphql';
-import { schema } from '~/graphql/server';
+import { GraphQLRequest, isDevelopment, shouldRenderGraphiQL } from '~/server/graphql/utils';
+import { schema } from '~/server/graphql/server';
 
 export default defineEventHandler((event) => {
     const server = createYoga<H3Event>({
-        context: ({ req, res }) => createGraphQLContext(req, res),
+        context: ({ node: { req, res } }) => createGraphQLContext(req, res),
         graphqlEndpoint: '/api',
         graphiql: (request) => shouldRenderGraphiQL(request as GraphQLRequest),
         maskedErrors: isDevelopment,
