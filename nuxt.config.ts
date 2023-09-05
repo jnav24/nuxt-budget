@@ -15,7 +15,19 @@ export default defineNuxtConfig({
         },
     },
     css: ['~/assets/css/main.css'],
-    modules: ['./modules/db/module', './modules/form/module', 'nuxt-graphql-server'],
+    modules: [
+        './modules/db/module',
+        './modules/form/module',
+        'nuxt-graphql-server',
+        '@nuxtjs/apollo',
+    ],
+    apollo: {
+        clients: {
+            default: {
+                httpEndpoint: '/api/graphql',
+            },
+        },
+    },
     graphqlServer: {
         schema: './server/graphql/generated/schema.graphql',
         url: '/api/graphql',
@@ -35,6 +47,7 @@ export default defineNuxtConfig({
         REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
         REDIS_PRIMARY_PORT: process.env.REDIS_PRIMARY_PORT ?? '6379',
         REDIS_REPLICA_PORT: process.env.REDIS_REPLICA_PORT ?? '6380',
+        SESSION_AUTH_EXPIRATION: process.env.SESSION_EXPIRATION ?? '29',
         SESSION_NAME: process.env.SESSION_NAME ?? '',
         public: {
             APP_NAME: process.env.APP_NAME,
