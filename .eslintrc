@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "extends": ["@nuxtjs/eslint-config-typescript", "plugin:prettier/recommended", "prettier"],
+  "parser": "vue-eslint-parser",
+  "parserOptions": { "parser": "@typescript-eslint/parser" },
+  "plugins": ["prettier"],
+  "rules": {
+    "curly": "off",
+    "no-shadow": "off",
+    "indent": "off",
+    "no-extra-semi": "off",
+    "import/no-relative-packages": "off",
+    "node/prefer-global/process": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "antfu/top-level-function": "off"
+  }
+}
