@@ -1,6 +1,7 @@
+import { IncomingMessage, ServerResponse } from 'node:http';
 import Cookies from 'cookies';
-import { IncomingMessage, ServerResponse } from 'http';
 import { convertMinutesToMilliseconds } from '~/utils/timestamp';
+import { ServerContext } from '~/server/graphql/builder';
 
 const config = useRuntimeConfig();
 
@@ -19,7 +20,12 @@ const getExpiration = (minutes: number) => {
     return d;
 };
 
-const setServerCookie = (
+export const getServerCookie = (ctx: ServerContext, name: string) => {
+    const cookie = new Cookies(ctx.req, ctx.res);
+    return cookie.get(name);
+};
+
+export const setServerCookie = (
     ctx: { req: IncomingMessage; res: ServerResponse },
     name: string,
     value: string,
@@ -35,4 +41,12 @@ const setServerCookie = (
         secure: options.secure || config.APP_ENV === 'production',
     };
     cookie.set(name, value, cookieOptions);
+};
+
+export const deleteServerCookie = (ctx: ServerContext, name: string) => {
+    const cookie = getServerCookie(ctx, name);
+
+    if (cookie) {
+        setServerCookie(ctx, name, cookie, { maxAge: -99999999 });
+    }
 };
