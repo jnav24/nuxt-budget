@@ -13,8 +13,8 @@ const arrayColumn = <
 };
 
 const toCamelCase = (value: string): string => {
-    const delimList: string[] = ['_', '-'];
-    let result = value;
+    const delimList: string[] = ['_', '-', ' '];
+    let result = value.replace(/\s+/g, ' ').trim();
 
     delimList.forEach((delim: string) => {
         if (result.includes(delim)) {
