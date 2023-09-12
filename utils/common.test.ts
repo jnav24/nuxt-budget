@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { arrayColumn, toCamelCase, toPascalCase } from './common';
+import { arrayColumn, toCamelCase, toKebabCase, toPascalCase, toSnakeCase } from './common';
 
 describe('array column', () => {
     const contacts = [
@@ -27,5 +27,23 @@ describe('convert casing', () => {
         expect(toPascalCase('first_name')).toBe('FirstName');
         expect(toPascalCase('first-name')).toBe('FirstName');
         expect(toPascalCase('first name')).toBe('FirstName');
+    });
+
+    it('should set the string to snake_case', () => {
+        expect(toSnakeCase('firstName')).toBe('first_name');
+        expect(toSnakeCase('homeSweetHome')).toBe('home_sweet_home');
+        expect(toSnakeCase('first-name')).toBe('first_name');
+        expect(toSnakeCase('home-sweet-home')).toBe('home_sweet_home');
+        expect(toSnakeCase('first name')).toBe('first_name');
+        expect(toSnakeCase('home sweet home')).toBe('home_sweet_home');
+    });
+
+    it('should set the string to kebab-case', () => {
+        expect(toKebabCase('firstName')).toBe('first-name');
+        expect(toKebabCase('homeSweetHome')).toBe('home-sweet-home');
+        expect(toKebabCase('first_name')).toBe('first-name');
+        expect(toKebabCase('home_sweet_home')).toBe('home-sweet-home');
+        expect(toKebabCase('first name')).toBe('first-name');
+        expect(toKebabCase('home sweet home')).toBe('home-sweet-home');
     });
 });

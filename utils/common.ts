@@ -2,6 +2,8 @@ const lcFirst = (val: string): string => val.charAt(0).toLowerCase() + val.slice
 
 const ucFirst = (val: string): string => val.charAt(0).toUpperCase() + val.slice(1);
 
+const trimSpaces = (val: string) => val.replace(/\s+/g, ' ').trim();
+
 const arrayColumn = <
     S extends keyof R,
     R extends Record<string, string | number | boolean | bigint>,
@@ -35,11 +37,15 @@ const toCamelCase = (value: string): string => {
     return result;
 };
 
-const toKebabCase = (value: string) =>
-    lcFirst(value).replace(/[A-Z]/, (str) => `-${str.toLowerCase()}`);
+const convertToCase = (value: string, subKey: string) => {
+    return lcFirst(trimSpaces(value))
+        .replace(/[-_\s]/g, subKey)
+        .replace(/[A-Z]/g, (str) => `${subKey}${str.toLowerCase()}`);
+};
 
-const toSnakeCase = (value: string) =>
-    lcFirst(value).replace(/[A-Z]/, (str) => `_${str.toLowerCase()}`);
+const toKebabCase = (value: string) => convertToCase(value, '-');
+
+const toSnakeCase = (value: string) => convertToCase(value, '_');
 
 const toPascalCase = (value: string) => ucFirst(toCamelCase(value));
 
