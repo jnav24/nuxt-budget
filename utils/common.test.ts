@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { arrayColumn, toCamelCase, toKebabCase, toPascalCase, toSnakeCase } from './common';
+import {
+    arrayColumn,
+    toCamelCase,
+    toKebabCase,
+    toPascalCase,
+    toSnakeCase,
+    toTitleCase,
+} from './common';
 
 describe('array column', () => {
     const contacts = [
@@ -45,5 +52,12 @@ describe('convert casing', () => {
         expect(toKebabCase('home_sweet_home')).toBe('home-sweet-home');
         expect(toKebabCase('first name')).toBe('first-name');
         expect(toKebabCase('home sweet home')).toBe('home-sweet-home');
+    });
+
+    it('should set the string to Title Case', () => {
+        expect(toTitleCase('first_name')).toBe('First Name');
+        expect(toTitleCase('first-name')).toBe('First Name');
+        expect(toTitleCase('first name')).toBe('First Name');
+        expect(toTitleCase('firstName')).toBe('First Name');
     });
 });

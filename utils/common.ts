@@ -49,9 +49,10 @@ const toSnakeCase = (value: string) => convertToCase(value, '_');
 
 const toPascalCase = (value: string) => ucFirst(toCamelCase(value));
 
-const toTitleCase = (value: string, casing = '-'): string => {
+const toTitleCase = (value: string): any => {
     return value
-        .split(casing)
+        .replace(/[A-Z]/g, (str) => ` ${str}`)
+        .split(/[_\s-]/g)
         .map((word) => ucFirst(word))
         .join(' ');
 };
