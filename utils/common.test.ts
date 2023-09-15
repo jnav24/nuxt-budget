@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     arrayColumn,
+    randomString,
     toCamelCase,
     toKebabCase,
     toPascalCase,
@@ -59,5 +60,11 @@ describe('convert casing', () => {
         expect(toTitleCase('first-name')).toBe('First Name');
         expect(toTitleCase('first name')).toBe('First Name');
         expect(toTitleCase('firstName')).toBe('First Name');
+    });
+});
+
+describe('random string', () => {
+    it('should return a string with random characters', () => {
+        expect(randomString(8).length).toEqual(8);
     });
 });
