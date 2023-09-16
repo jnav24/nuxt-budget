@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     arrayColumn,
     randomString,
+    sortObject,
     toCamelCase,
     toKebabCase,
     toPascalCase,
@@ -66,5 +67,24 @@ describe('convert casing', () => {
 describe('random string', () => {
     it('should return a string with random characters', () => {
         expect(randomString(8).length).toEqual(8);
+    });
+});
+
+describe('sort object', () => {
+    it('should sort object of strings', () => {
+        const original = {
+            zuchini: 'zuchini',
+            banana: 'banana',
+            apple: 'apple',
+            orange: 'orange',
+        };
+
+        const result = sortObject(original);
+        const keys = Object.keys(result);
+
+        expect(keys[0]).toBe('apple');
+        expect(keys[1]).toBe('banana');
+        expect(keys[2]).toBe('orange');
+        expect(keys[3]).toBe('zuchini');
     });
 });
