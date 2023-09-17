@@ -1,4 +1,4 @@
-import { getUnixTime } from 'date-fns';
+import { format, getUnixTime } from 'date-fns';
 
 const getDefaultDateTime = () => {
     const d = new Date();
@@ -33,6 +33,10 @@ const getDateObject = (timestamp = '') => {
 
     const [_, year, month, day, hours, minutes, seconds] = getSafeDateTime(ts);
     return new Date(+year, +month, +day, +hours, +minutes, +seconds);
+};
+
+export const formatDate = (timestamp = '', pattern = 'yyyy-MM-dd hh:mm:ss') => {
+    return format(getDateObject(timestamp), pattern);
 };
 
 export const unix = (timestamp = '') => {
