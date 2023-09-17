@@ -1,31 +1,58 @@
+import { IncomingMessage, ServerResponse } from 'http';
 import SchemaBuilder from '@pothos/core';
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
 import SimpleObjectsPlugin from '@pothos/plugin-simple-objects';
 import PrismaPlugin from '@pothos/plugin-prisma';
-import { IncomingMessage, ServerResponse } from 'http';
+import type PrismaTypes from '@pothos/plugin-prisma/generated';
+import { EventHandlerRequest, H3Event } from 'h3';
 import { UnauthorizedException } from '~/utils/exceptions';
 import { useDatabase } from '#budgetdb';
-import type PrismaTypes from '@pothos/plugin-prisma/generated';
-import { Auth, Base } from '~/server/graphql/generated/types';
+import { Auth, Base, User } from '~/server/graphql/generated/types';
+import { getCurrentSession } from '~/utils/server/session';
 
 const { db } = useDatabase();
 
-export type Context = {
+export type ServerContext = {
     req: IncomingMessage;
     res: ServerResponse;
-    session?: any | null;
-    // user?: Pick<Users, 'id' | 'pk' | 'email'>;
 };
 
-export async function createGraphQLContext(
-    req: IncomingMessage,
-    res: ServerResponse,
-): Promise<Context> {
+export type Context = {
+    event: H3Event<EventHandlerRequest>;
+    session?: string | null;
+    user?: Pick<User, 'id' | 'email'>;
+};
+
+export function createGraphQLContext(event: H3Event<EventHandlerRequest>): Context {
+    const currentSession = await getCurrentSession({ req: event.node.req, res: event.node.res });
+    let user = null;
+
+    if (currentSession && currentSession.auth?.uid) {
+        // @todo this needs to be tested
+        user = await db.user.findFirst({
+            where: {
+                NOT: [
+                    {
+                        email_verified_at: null,
+                    },
+                ],
+                AND: [
+                    {
+                        id: currentSession.auth.uid,
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                email: true,
+            },
+        });
+    }
+
     return {
-        req,
-        res,
-        // session: req.session,
-        // user: await resolveContext({ req, res }),
+        event,
+        session: currentSession,
+        user,
     };
 }
 
@@ -54,10 +81,10 @@ export const builder = new SchemaBuilder<SchemaBuilderType>({
     scopeAuthOptions: {
         unauthorizedError: () => new UnauthorizedException('Not Authorized'),
     },
-    authScopes: async (ctx) => {
+    authScopes: ({ user }) => {
         return {
-            auth: true,
-            public: false,
+            auth: !!user,
+            public: !user,
         };
     },
 });
@@ -72,7 +99,7 @@ builder.scalarType('DateTime', {
     },
     parseValue: (date) => {
         if (typeof date !== 'string') {
-            throw new Error('Unknown date value.');
+            throw new TypeError('Unknown date value.');
         }
 
         return new Date(date);

@@ -37,7 +37,7 @@ const generateSessionId = (req: IncomingMessage) => {
     return hashWithSha256(`${rand}|${getClientIp(req)}|${unix()}`);
 };
 
-const getCurrentSession = async (
+export const getCurrentSession = async (
     ctx: ServerContext,
 ): Promise<null | (BudgetSession & BudgetCookie)> => {
     const cookie = getServerCookie(ctx, config.SESSION_NAME);
@@ -67,6 +67,21 @@ const updateSession = async (sessionId: string, data: BudgetSession) => {
 };
 
 const isExpired = (timestamp: number) => unix() > timestamp;
+
+const updateCurrentPath = (
+    event: H3Event<EventHandlerRequest>,
+    data: BudgetSession,
+): BudgetSession => {
+    data.path.previous = data.path.current;
+    data.path.current = getRequestURL(event).pathname;
+    return data;
+};
+
+// @todo decide if you should keep this function or delete session entirely
+const removeAuthFromSession = (data: BudgetSession): BudgetSession => {
+    data.auth = undefined;
+    return data;
+};
 
 export const removeSession = async (ctx: ServerContext) => {
     const cookie = await getCurrentSession(ctx);
@@ -140,35 +155,12 @@ export const setUserInSession = async (ctx: ServerContext, uid: string) => {
     await updateSession(id, data);
 };
 
-export const getAuthSession = async (event: H3Event<EventHandlerRequest>) => {
+export const setSessionPath = async (event: H3Event<EventHandlerRequest>) => {
     const { req, res } = event.node;
     const currentSession = await getCurrentSession({ req, res });
 
-    if (!currentSession || !currentSession.auth) {
-        return false;
-    }
-
-    if (
-        !currentSession.auth.uid ||
-        !currentSession.auth.expires_at ||
-        isExpired(currentSession.auth.expires_at)
-    ) {
+    if (currentSession && currentSession.path) {
         const { id, ...data } = currentSession;
-        data.auth = undefined;
-        data.path.previous = data.path.current;
-        data.path.current = getRequestURL(event).pathname;
-        await updateSession(id, data);
-        return false;
+        await updateSession(id, updateCurrentPath(data));
     }
-
-    const user = await db.user.findFirst({
-        where: { uuid: currentSession.auth.uid },
-        select: { email_verified_at: true },
-    });
-
-    if (!user) {
-        return false;
-    }
-
-    return { emailVerified: !!user.email_verified_at, redirectTo: currentSession.path.current };
 };
