@@ -9,18 +9,46 @@ type Base {
 
 scalar DateTime
 
+input LoginInput {
+  email: String
+  password: String
+  remember_me: Boolean
+}
+
 type Mutation {
+  login(input: LoginInput!): Auth!
   logout: Auth
+  register: Auth!
 }
 
 type Query {
-  getUser: Users
+  getUser: User
+}
+
+type User {
+  email: String!
+  emailVerifiedAt: DateTime
+  id: ID!
+  profile: UserProfile!
+  rememberToken: String!
+  vehicles: [UserVehicles!]!
 }
 
 type UserProfile {
   firstName: String!
+  id: ID!
+  image: String!
+  lastName: String!
 }
 
-type Users {
-  email: String!
+type UserVehicles {
+  active: Boolean!
+  color: String!
+  deleted: DateTime
+  id: ID!
+  isDeleted: Boolean!
+  license: String
+  make: String!
+  model: String!
+  year: String!
 }
