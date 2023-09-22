@@ -1,16 +1,18 @@
 import { faker } from '@faker-js/faker';
-import { v4 as uuidv4 } from 'uuid';
-import { User } from '@prisma/client';
+import { v4 as uuid } from 'uuid';
+import { PrismaClient, User } from '@prisma/client';
 // import { hashPassword } from '../../utils/server/encryption';
-import Factory from './Factory';
-// import { formatDate, unix } from '../../utils/timestamp';
+import Factory, { FactoryContract } from './Factory';
 
-export default class UserFactory extends Factory {
-    protected state: Omit<User, 'id'> = {} as Omit<User, 'id'>;
+export default class UserFactory
+    extends Factory<Partial<User>>
+    implements FactoryContract<Partial<User>>
+{
+    readonly tableName: keyof PrismaClient = 'user';
 
-    public definition(data?: Partial<User>) {
-        this.state = {
-            uuid: uuidv4(),
+    public definition(): Partial<User> {
+        return {
+            uuid: uuid(),
             email: faker.internet.email(),
             password: 'password',
             email_verified_at: null,
@@ -19,13 +21,14 @@ export default class UserFactory extends Factory {
             remember_token: null,
             created_at: new Date(),
             updated_at: new Date(),
-            ...data,
         };
-
-        return this;
     }
 
     public verified() {
         this.state.email_verified_at = new Date();
     }
 }
+
+// const userFactory = new UserFactory();
+// userFactory.create<User>();
+// userFactory.count(3).create<User>();
