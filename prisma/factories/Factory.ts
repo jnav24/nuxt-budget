@@ -1,4 +1,7 @@
-import type { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { BadRequestException } from '../../utils/exceptions';
+
+const db = new PrismaClient();
 
 export interface FactoryContract<T> {
     readonly tableName: keyof PrismaClient;
@@ -24,17 +27,29 @@ export default class Factory<T> {
     }
 
     public create<T>(definition = {} as T) {
+        const factoryDefinition = this.definition();
+
+        if (
+            !this.tableName ||
+            (!Object.keys(factoryDefinition).length &&
+                !Object.keys(definition).length &&
+                !Object.keys(this.state).length)
+        ) {
+            throw new BadRequestException('Ensure table name and/or definition are set');
+        }
+
         const data = Array.from(new Array(this.count).keys()).map(() => ({
-            ...this.definition(),
+            ...factoryDefinition,
             ...definition,
             ...this.state,
         }));
+
         this.reset();
 
         if (data.length === 1) {
-            return {};
+            return (db[this.tableName] as any).create(data[0]);
         }
 
-        return {};
+        return (db[this.tableName] as any)?.createMany(data);
     }
 }
