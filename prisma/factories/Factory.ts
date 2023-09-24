@@ -8,7 +8,7 @@ export interface FactoryContract<T> {
     definition: () => T;
 }
 
-export default class Factory<T> {
+export default class Factory<T extends {}> {
     public tableName: keyof PrismaClient | null = null;
     protected iterate = 1;
     protected state = {} as T;
@@ -26,7 +26,7 @@ export default class Factory<T> {
         return this;
     }
 
-    public create<T>(definition = {} as T) {
+    public create<T extends {}>(definition = {} as T) {
         const factoryDefinition = this.definition();
 
         if (
