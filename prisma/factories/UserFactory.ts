@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { v4 as uuid } from 'uuid';
+import { hashSync } from 'bcrypt';
 import { PrismaClient, User } from '@prisma/client';
-// import { hashPassword } from '../../utils/server/encryption';
 import Factory, { FactoryContract } from './Factory';
 
 export default class UserFactory
@@ -14,7 +14,7 @@ export default class UserFactory
         return {
             uuid: uuid(),
             email: faker.internet.email(),
-            password: 'password',
+            password: hashSync('password', 10),
             email_verified_at: null,
             two_factor_recovery_codes: null,
             two_factor_secret: null,
@@ -26,9 +26,6 @@ export default class UserFactory
 
     public verified() {
         this.state.email_verified_at = new Date();
+        return this;
     }
 }
-
-// const userFactory = new UserFactory();
-// userFactory.create<User>();
-// userFactory.count(3).create<User>();
