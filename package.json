@@ -16,6 +16,7 @@
     "@babel/core": "^7.22.15",
     "@babel/plugin-transform-class-properties": "7.22.5",
     "@babel/plugin-transform-object-rest-spread": "7.22.15",
+    "@faker-js/faker": "^8.0.2",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-operations": "^4.0.1",
@@ -23,6 +24,7 @@
     "@nuxt/test-utils": "^3.7.3",
     "@nuxtjs/apollo": "^5.0.0-alpha.6",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "@vitest/coverage-v8": "^0.34.3",
@@ -37,7 +39,7 @@
     "postcss": "^8.4.19",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
-    "prisma": "^5.2.0",
+    "prisma": "^5.3.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "^3.3.3",
     "ts-node": "^10.9.1",
@@ -55,7 +57,7 @@
     "@pothos/plugin-relay": "^3.43.1",
     "@pothos/plugin-scope-auth": "^3.20.0",
     "@pothos/plugin-simple-objects": "^3.7.0",
-    "@prisma/client": "^5.2.0",
+    "@prisma/client": "^5.3.1",
     "@types/bcrypt": "^5.0.0",
     "@types/cookies": "^0.7.8",
     "@types/crypto-js": "^4.1.1",
@@ -72,6 +74,7 @@
     "h3": "^1.8.1",
     "ioredis": "^5.2.5",
     "nuxt-graphql-server": "^2.0.1",
-    "request-ip": "^3.3.0"
+    "request-ip": "^3.3.0",
+    "uuid": "^9.0.1"
   }
 }
