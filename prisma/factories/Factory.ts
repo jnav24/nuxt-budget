@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { BadRequestException } from '../../utils/exceptions';
+import { error } from '../../utils/logger';
 
 const db = new PrismaClient();
 
@@ -17,6 +18,37 @@ export default class Factory<T extends {}> {
         this.state = {} as T;
     }
 
+    private validate<T extends {}>(definition = {} as Partial<T>) {
+        if (
+            !this.tableName ||
+            (!Object.keys(this.definition()).length &&
+                !Object.keys(definition).length &&
+                !Object.keys(this.state).length)
+        ) {
+            throw new BadRequestException('Ensure table name and/or definition are set');
+        }
+    }
+
+    private setDefinitionData<T extends {}>(definition = {} as Partial<T>) {
+        const iterateList = Array.from(new Array(this.iterate).keys());
+
+        return iterateList.map(async () => {
+            const mergedData = {
+                ...this.definition(),
+                ...definition,
+                ...this.state,
+            };
+
+            for (const [key, value] of Object.entries(mergedData)) {
+                if (typeof value === 'function') {
+                    mergedData[key as keyof Partial<T>] = await value();
+                }
+            }
+
+            return mergedData;
+        });
+    }
+
     protected definition() {
         return this.state;
     }
@@ -26,32 +58,20 @@ export default class Factory<T extends {}> {
         return this;
     }
 
-    public create<T extends {}>(definition = {} as T) {
-        if (
-            !this.tableName ||
-            (!Object.keys(this.definition()).length &&
-                !Object.keys(definition).length &&
-                !Object.keys(this.state).length)
-        ) {
-            throw new BadRequestException('Ensure table name and/or definition are set');
-        }
-
-        const data = Array.from(new Array(this.iterate).keys()).map(() => ({
-            ...this.definition(),
-            ...definition,
-            ...this.state,
-        }));
-
+    public async create<T extends {}>(definition = {} as Partial<T>) {
+        this.validate(definition);
+        const tableName = this.tableName as keyof PrismaClient;
+        const data = await Promise.all(this.setDefinitionData(definition));
         this.reset();
 
         try {
             if (data.length === 1) {
-                return (db[this.tableName] as any).create({ data: data[0] });
+                return (db[tableName] as any).create({ data: data[0] });
             }
 
-            return (db[this.tableName] as any)?.createMany({ data });
+            return (db[tableName] as any)?.createMany({ data });
         } catch (err) {
-            console.log(err);
+            error((err as any)?.message ?? err);
         }
     }
 }
