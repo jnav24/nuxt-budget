@@ -1,8 +1,8 @@
+import { UserVehicle } from '@prisma/client';
 import { builder } from '~/server/graphql/builder';
-import { UserVehicles } from '@prisma/client';
 
 const setBuilder = (pothos: typeof builder) => {
-    pothos.prismaObject('UserVehicles', {
+    pothos.prismaObject('UserVehicle', {
         findUnique: (vehicle) => ({ id: vehicle.id }),
         fields: (t) => ({
             id: t.exposeID('uuid'),
@@ -14,7 +14,7 @@ const setBuilder = (pothos: typeof builder) => {
             active: t.exposeBoolean('active'),
             deleted: t.expose('image', { nullable: true, type: 'DateTime' }),
             isDeleted: t.boolean({
-                resolve: (vehicle: UserVehicles) => !!vehicle.deleted_at,
+                resolve: (vehicle: UserVehicle) => !!vehicle.deleted_at,
             }),
         }),
     });

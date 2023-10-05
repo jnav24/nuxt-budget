@@ -9,7 +9,7 @@ const setBuilder = (pothos: typeof builder) => {
             emailVerifiedAt: t.expose('email_verified_at', { nullable: true, type: 'DateTime' }),
             rememberToken: t.exposeString('remember_token'),
             profile: t.relation('UserProfile'),
-            vehicles: t.relation('UserVehicles'),
+            vehicles: t.relation('UserVehicle'),
         }),
     });
 

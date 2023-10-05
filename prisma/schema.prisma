@@ -1017,7 +1017,7 @@ model User {
   created_at                DateTime            @default(now())
   updated_at                DateTime            @updatedAt
   UserProfile               UserProfile?
-  UserVehicles              UserVehicles[]
+  UserVehicle               UserVehicle[]
   Budgets                   Budget[]
   BudgetAggregation         BudgetAggregation[]
   BudgetTemplate            BudgetTemplate?
@@ -1039,7 +1039,7 @@ model UserProfile {
   @@map("user_profile")
 }
 
-model UserVehicles {
+model UserVehicle {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   uuid       String    @unique @default(uuid())
   user_id    BigInt    @db.UnsignedBigInt

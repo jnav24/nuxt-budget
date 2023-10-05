@@ -1,16 +1,16 @@
 import { faker } from '@faker-js/faker';
 import { v4 as uuid } from 'uuid';
-import { PrismaClient, UserVehicles } from '@prisma/client';
+import { PrismaClient, UserVehicle } from '@prisma/client';
 import Factory, { FactoryContract } from './Factory';
 import UserFactory from './UserFactory';
 
 export default class UserVehicleFactory
-    extends Factory<Partial<UserVehicles>>
-    implements FactoryContract<Partial<UserVehicles>>
+    extends Factory<Partial<UserVehicle>>
+    implements FactoryContract<Partial<UserVehicle>>
 {
-    readonly tableName: keyof PrismaClient = 'userVehicles';
+    readonly tableName: keyof PrismaClient = 'userVehicle';
 
-    public definition(): Partial<UserVehicles> {
+    public definition(): Partial<UserVehicle> {
         return {
             uuid: uuid(),
             user_id: (async () => (await new UserFactory().create()).id) as any,

@@ -8,7 +8,7 @@ const setBuilder = (pothos: typeof builder) => {
         t.prismaField({
             nullable: true,
             type: 'User',
-            resolve: async () => {
+            resolve: (_query, _parent, _args, _context, _info) => {
                 return db.user.findFirst({
                     where: { id: 1 },
                 });
