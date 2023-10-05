@@ -27,9 +27,9 @@ export type Base = {
 };
 
 export type LoginInput = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  remember_me?: InputMaybe<Scalars['Boolean']['input']>;
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  rememberMe?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Mutation = {
@@ -56,7 +56,7 @@ export type User = {
   id: Scalars['ID']['output'];
   profile: UserProfile;
   rememberToken: Scalars['String']['output'];
-  vehicles: Array<UserVehicles>;
+  vehicles: Array<UserVehicle>;
 };
 
 export type UserProfile = {
@@ -67,8 +67,8 @@ export type UserProfile = {
   lastName: Scalars['String']['output'];
 };
 
-export type UserVehicles = {
-  __typename?: 'UserVehicles';
+export type UserVehicle = {
+  __typename?: 'UserVehicle';
   active: Scalars['Boolean']['output'];
   color: Scalars['String']['output'];
   deleted?: Maybe<Scalars['DateTime']['output']>;

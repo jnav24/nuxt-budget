@@ -10,9 +10,9 @@ type Base {
 scalar DateTime
 
 input LoginInput {
-  email: String
-  password: String
-  remember_me: Boolean
+  email: String!
+  password: String!
+  rememberMe: Boolean
 }
 
 type Mutation {
@@ -31,7 +31,7 @@ type User {
   id: ID!
   profile: UserProfile!
   rememberToken: String!
-  vehicles: [UserVehicles!]!
+  vehicles: [UserVehicle!]!
 }
 
 type UserProfile {
@@ -41,7 +41,7 @@ type UserProfile {
   lastName: String!
 }
 
-type UserVehicles {
+type UserVehicle {
   active: Boolean!
   color: String!
   deleted: DateTime
