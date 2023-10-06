@@ -1,5 +1,5 @@
+import { unix } from '../timestamp';
 import { useRedis } from '#budgetdb';
-import { unix } from '~/utils/timestamp';
 
 const { session, sessionRead } = useRedis();
 
@@ -14,7 +14,7 @@ type RateLimiter = {
     timestamp: number;
 };
 
-export const hasTooManyAttempts = async () => {
+export const hasTooManyAttempts = async (key: string) => {
     const obj = await sessionRead.get(key);
     return !!obj && (JSON.parse(obj).attempts >= attempts || unix() < JSON.parse(obj).timestamp);
 };
@@ -41,7 +41,7 @@ export const addAttempt = async (key: string) => {
 
 export const clearAttempts = (key: string) => session.getdel(key);
 
-export const lockAccount = async () => {
+export const lockAccount = async (key: string) => {
     const obj = await sessionRead.get(key);
 
     if (obj) {
