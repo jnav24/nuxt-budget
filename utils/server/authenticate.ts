@@ -1,0 +1,100 @@
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import { getClientIp } from 'request-ip';
+import { TooManyRequestsException, UnauthorizedException } from '../exceptions';
+import { getErrorMessage } from '../common';
+import { error } from '../logger';
+import { unix } from '../timestamp';
+import { LoginInput } from '../../server/graphql/generated/types';
+import type { Context } from '../../server/graphql/builder';
+import { encryptWithAES, hashWithSha256, verifyPassword } from './encryption';
+import {
+    accountAvailableIn,
+    addAttempt,
+    clearAttempts,
+    hasTooManyAttempts,
+    lockAccount,
+} from './rate-limiter';
+import { setServerCookie } from './cookies';
+import { setUserInSession } from './session';
+import { useDatabase } from '#budgetdb';
+
+const { db } = useDatabase();
+
+const config = useRuntimeConfig();
+
+const REMEMBER_TOKEN = `${config.SESSION_NAME}_remember_me`;
+
+const ensureIsNotRateLimited = async (key: string) => {
+    if (await hasTooManyAttempts(key)) {
+        await lockAccount(key);
+        const seconds = await accountAvailableIn(key);
+        throw new TooManyRequestsException(
+            `There were too many attempts to login. Account is locked for ${Math.ceil(
+                seconds / 60,
+            )} minutes`,
+        );
+    }
+};
+
+const setRememberMe = async (
+    shouldRemember: boolean,
+    email: string,
+    key: string,
+    context: { req: IncomingMessage; res: ServerResponse },
+) => {
+    try {
+        if (shouldRemember) {
+            const hash = hashWithSha256(`${key}|${unix()}`);
+            await db.user.update({
+                where: { email },
+                data: { remember_token: hash },
+            });
+
+            setServerCookie(context, REMEMBER_TOKEN, encryptWithAES(hash), { maxAge: 43000 });
+        }
+    } catch (err) {
+        error(`Remember me token: ${getErrorMessage(err)}`);
+    }
+};
+
+const getUserByEmail = (email: string) => {
+    return db.user.findFirstOrThrow({
+        where: {
+            email: {
+                equals: email,
+            },
+        },
+    });
+};
+
+// @todo User
+const verifyUser = async (key: string, password: string, user: User | null) => {
+    if (!user || !verifyPassword(password, user.password)) {
+        await addAttempt(key);
+        throw new UnauthorizedException('Username and/or password are incorrect');
+    }
+};
+
+export const authenticateUser = async (
+    { email, password, rememberMe }: LoginInput,
+    { event }: Context,
+) => {
+    const {
+        node: { req, res },
+    } = event;
+    const key = `${email}|${getClientIp(req)}`;
+    await ensureIsNotRateLimited(key);
+    const user = await getUserByEmail(email as string);
+    await verifyUser(key, password, user);
+    await setRememberMe(rememberMe as boolean, email as string, key, { req, res });
+    await clearAttempts(key);
+    await setUserInSession({ req, res }, user.uuid);
+};
+
+export const registerUser = async () => {};
+
+export const getUserFromRememberMeToken = async () => {};
+
+export const removeRememberMe = async () => {};
+
+export const changeUserPassword = async () => {};
