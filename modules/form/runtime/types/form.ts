@@ -1,16 +1,5 @@
 export const FormContext = Symbol('FormContext');
 
-type FormElementsType = Record<string, FormElementValidationType>;
-
-export type FormContextType = {
-    formElements: FormElementsType;
-    setupForm: (label: string, rules: any) => string;
-    validateField: (labelId: string, value: string, initialize?: boolean) => string | null;
-    valid: boolean;
-    validateAllFields: () => void;
-    resetFields: () => void;
-};
-
 export type RulesOptions = {
     message?: string;
     pattern?: string;
@@ -39,4 +28,15 @@ export type FormElementValidationType = {
     rules: RulesType | Array<keyof RulesType>;
     error: string | null;
     value: string;
+};
+
+type FormElementsType = Record<string, FormElementValidationType>;
+
+export type FormContextType = {
+    formElements: FormElementsType;
+    setupForm: (label: string, rules: any) => string;
+    validateField: (labelId: string, value: string, initialize?: boolean) => string | null;
+    valid: boolean;
+    validateAllFields: () => void;
+    resetFields: () => void;
 };
