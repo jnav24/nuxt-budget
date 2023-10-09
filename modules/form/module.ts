@@ -28,7 +28,7 @@ export default defineNuxtModule({
                 },
             );
 
-            nitroConfig.alias['#budgetform'] = resolve('./runtime/server/services');
+            nitroConfig.alias['#budgetform'] = resolve('./runtime');
         });
 
         // this works
@@ -45,5 +45,28 @@ export default defineNuxtModule({
         });
 
         // addImportsDir(resolve(runtimeDir, 'composables'))
+
+        addTemplate({
+            filename: 'types/budget-form.d.ts',
+            getContents: () =>
+                [
+                    "declare module '#budgetform' {",
+                    `import { RulesType } from '${resolve('./runtime/types')}/form'`,
+                    'interface BudgetForm {',
+                    'validateRequest: <InputObject, RuleObject extends keyof InputObject>(',
+                    '    request: InputObject,',
+                    '    rulesObject: Record<RuleObject, Array<keyof RulesType> | RulesType>,',
+                    ') => void',
+                    '}',
+                    `const useFormValidator: () => BudgetForm = import('${resolve('./runtime')}')`,
+                    '}',
+                ].join('\n'),
+        });
+
+        nuxt.hook('prepare:types', (options) => {
+            options.references.push({
+                path: resolve(nuxt.options.buildDir, 'types/budget-form.d.ts'),
+            });
+        });
     },
 });
