@@ -1,4 +1,6 @@
-export class ValidationException extends Error {
+import { GraphQLError } from 'graphql';
+
+export class ValidationException extends GraphQLError {
     code = 'Unprocessable Entity';
     status = 422;
     errors: Record<string, string> = {};
@@ -6,7 +8,7 @@ export class ValidationException extends Error {
     constructor(message: string, errors: Record<string, string>) {
         super(message);
         this.name = 'ValidationException';
-        this.errors = this.setErrors(errors);
+        this.extensions.errors = this.setErrors(errors);
     }
 
     // @todo I might not need this since I may bring in the errors in the appropriate type. think about it.

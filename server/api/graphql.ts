@@ -20,6 +20,7 @@ const apollo = new ApolloServer({
         if (config.APP_ENV === 'production') {
             return {
                 message: formattedError.message,
+                errors: formattedError?.extensions?.errors ?? {},
             };
         }
 
