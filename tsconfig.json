@@ -2,11 +2,19 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "~": [
+        "./"
+      ],
+      "~/*": [
+        "./*"
+      ]
+    }
   },
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"
     }
-  },
+  }
 }
