@@ -8,8 +8,7 @@ import { EventHandlerRequest, H3Event } from 'h3';
 import { UnauthorizedException } from '~/utils/exceptions';
 import { useDatabase } from '#budgetdb';
 import { Auth, Base, User } from '~/server/graphql/generated/types';
-import { getCurrentSession } from '~/utils/server/session';
-import { BudgetContext } from '~/utils/server/session';
+import { BudgetContext, getCurrentSession } from '~/utils/server/session';
 
 const { db } = useDatabase();
 
@@ -38,7 +37,7 @@ export async function createGraphQLContext(event: H3Event<EventHandlerRequest>):
                 ],
                 AND: [
                     {
-                        id: currentSession.auth.uid,
+                        uuid: currentSession.auth.uid,
                     },
                 ],
             },
