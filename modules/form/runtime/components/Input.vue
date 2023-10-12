@@ -26,7 +26,7 @@ const { error, labelId, updateInputValue } = useForm({
     rules: props.rules,
 });
 
-const updateValue = (event: InputEvent | FocusEvent) => {
+const updateValue = (event: Event) => {
     const { value } = event.target as HTMLInputElement;
     updateInputValue(value);
     emit('update:value', value);
@@ -47,7 +47,7 @@ const updateOnBlur = (event: FocusEvent) => {
 
         <div class="relative mb-2">
             <div
-                class="absolute top-0 left-0 w-10 h-full flex flex-row justify-center items-center"
+                class="absolute left-0 top-0 flex h-full w-10 flex-row items-center justify-center"
                 v-if="icon"
             >
                 {{ icon }}
@@ -55,11 +55,11 @@ const updateOnBlur = (event: FocusEvent) => {
 
             <input
                 :id="labelId"
-                class="w-full p-2 mt-2 border rounded outline-none"
+                class="mt-2 w-full rounded border p-2 outline-none"
                 :class="{
                     'border-gray-300 focus:border-primary': !error,
                     'border-red-600': error,
-                    'bg-gray-200 dark:bg-gray-700 text-gray-500': readOnly,
+                    'bg-gray-200 text-gray-500 dark:bg-gray-700': readOnly,
                 }"
                 :type="password ? 'password' : 'text'"
                 :value="value"
