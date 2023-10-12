@@ -11,12 +11,10 @@ export default function useForm({ label, rules, validateOnInit, value }: Props) 
     const formContext = inject<FormContextType>(FormContext);
     const labelId = ref('');
 
-    onMounted(() => {
-        if (label && !!formContext && Object.keys(formContext).length) {
-            labelId.value = formContext.setupForm(label, rules);
-            formContext.validateField(labelId.value, value, validateOnInit);
-        }
-    });
+    if (label && !!formContext && Object.keys(formContext).length) {
+        labelId.value = formContext.setupForm(label, rules);
+        formContext.validateField(labelId.value, value, validateOnInit);
+    }
 
     const error = computed(() => {
         if (formContext && formContext.formElements[labelId.value]) {
