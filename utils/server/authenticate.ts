@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { getClientIp } from 'request-ip';
+import { User } from '@prisma/client';
 import { TooManyRequestsException, UnauthorizedException } from '../exceptions';
 import { getErrorMessage } from '../common';
 import { error } from '../logger';
@@ -58,7 +59,7 @@ const setRememberMe = async (
 };
 
 const getUserByEmail = (email: string) => {
-    return db.user.findFirstOrThrow({
+    return db.user.findFirst({
         where: {
             email: {
                 equals: email,
@@ -67,7 +68,6 @@ const getUserByEmail = (email: string) => {
     });
 };
 
-// @todo User
 const verifyUser = async (key: string, password: string, user: User | null) => {
     if (!user || !verifyPassword(password, user.password)) {
         await addAttempt(key);
@@ -88,7 +88,10 @@ export const authenticateUser = async (
     await verifyUser(key, password, user);
     await setRememberMe(rememberMe as boolean, email as string, key, { req, res });
     await clearAttempts(key);
-    await setUserInSession({ req, res }, user.uuid);
+    await setUserInSession(
+        { req, res },
+        { uuid: user!.uuid, activated_at: user!.email_verified_at },
+    );
 };
 
 export const registerUser = async () => {};
