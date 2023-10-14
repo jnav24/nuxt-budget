@@ -29,6 +29,8 @@ type BudgetSession = {
     };
 };
 
+export type BudgetContext = BudgetSession & BudgetCookie;
+
 const expirationInMinutes = Number(config.SESSION_EXPIRATION);
 const expirationInSeconds = convertMinutesToSeconds(expirationInMinutes);
 
@@ -160,7 +162,7 @@ export const setSessionPath = async (event: H3Event<EventHandlerRequest>) => {
     const currentSession = await getCurrentSession({ req, res });
 
     if (currentSession && currentSession.path) {
-        const { id, ...data } = currentSession;
-        await updateSession(id, updateCurrentPath(data));
+        const { id, ...rest } = currentSession;
+        await updateSession(id, updateCurrentPath(event, rest));
     }
 };
