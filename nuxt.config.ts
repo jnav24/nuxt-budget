@@ -50,6 +50,7 @@ export default defineNuxtConfig({
         REDIS_REPLICA_PORT: process.env.REDIS_REPLICA_PORT ?? '6380',
         SESSION_EXPIRATION: process.env.SESSION_EXPIRATION ?? '60',
         SESSION_NAME: process.env.SESSION_NAME ?? '',
+        RATELIMIT_ATTEMPTS: process.env.RATELIMIT_ATTEMPTS ?? '3',
         public: {
             APP_NAME: process.env.APP_NAME,
         },
