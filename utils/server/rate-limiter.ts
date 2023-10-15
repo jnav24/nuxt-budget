@@ -5,7 +5,7 @@ const { session, sessionRead } = useRedis();
 
 const config = useRuntimeConfig();
 
-const attempts = Number();
+const attempts = Number(config.RATELIMIT_ATTEMPTS);
 const lockedSeconds = 300;
 
 type RateLimiter = {
@@ -49,7 +49,7 @@ export const lockAccount = async (key: string) => {
         parsed.locks += 1;
         parsed.attempts = 0;
         parsed.timestamp = unix() + lockedSeconds * parsed.locks;
-        await session.set(key, JSON.stringify(obj));
+        await session.set(key, JSON.stringify(parsed));
     }
 };
 
