@@ -7,7 +7,8 @@ import { error } from '../logger';
 import { unix } from '../timestamp';
 import { LoginInput } from '../../server/graphql/generated/types';
 import type { Context } from '../../server/graphql/builder';
-import { encryptWithAES, hashWithSha256, verifyPassword } from './encryption';
+import { ServerContext } from '../../server/graphql/builder';
+import { decryptAES, encryptWithAES, hashWithSha256, verifyPassword } from './encryption';
 import {
     accountAvailableIn,
     addAttempt,
@@ -15,7 +16,7 @@ import {
     hasTooManyAttempts,
     lockAccount,
 } from './rate-limiter';
-import { setServerCookie } from './cookies';
+import { deleteServerCookie, getServerCookie, setServerCookie } from './cookies';
 import { setUserInSession } from './session';
 import { useDatabase } from '#budgetdb';
 
@@ -98,6 +99,23 @@ export const registerUser = async () => {};
 
 export const getUserFromRememberMeToken = async () => {};
 
-export const removeRememberMe = async () => {};
+export const removeRememberMe = async (ctx: ServerContext) => {
+    try {
+        const cookie = getServerCookie(ctx, REMEMBER_TOKEN);
+
+        if (cookie) {
+            const decryptToken = decryptAES(cookie);
+
+            await db.user.update({
+                where: { remember_token: decryptToken },
+                data: { remember_token: null },
+            });
+
+            deleteServerCookie(ctx, REMEMBER_TOKEN);
+        }
+    } catch (err) {
+        error(`Remove remember me:: ${getErrorMessage(err)}`);
+    }
+};
 
 export const changeUserPassword = async () => {};
