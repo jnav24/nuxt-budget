@@ -1,10 +1,9 @@
 import { builder } from '~/server/graphql/builder';
-import { useDatabase } from '#budgetdb';
 import { useFormValidator } from '#budgetform';
 import { LoginInput } from '~/server/graphql/schemas/inputs/AuthInput';
-import { authenticateUser } from '~/utils/server/authenticate';
+import { authenticateUser, removeRememberMe } from '~/utils/server/authenticate';
+import { removeSession } from '~/utils/server/session';
 
-const { db } = useDatabase();
 const { validateRequest } = useFormValidator();
 
 const setBuilder = (pothos: typeof builder) => {
@@ -13,9 +12,12 @@ const setBuilder = (pothos: typeof builder) => {
             skipTypeScopes: true,
             type: 'Auth',
             nullable: true,
-            resolve: async (_parent, _args, _context, _info) => {
-                // await removeRememberMe({ req, res });
-                // await removeSession(req);
+            resolve: async (_parent, _args, { event }, _info) => {
+                const {
+                    node: { req, res },
+                } = event;
+                await removeRememberMe({ req, res });
+                await removeSession({ req, res });
                 return { success: true };
             },
         }),
