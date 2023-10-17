@@ -26,6 +26,7 @@ type BudgetSession = {
     auth?: {
         uid: string;
         expires_at: number;
+        activated_at: Date | null;
     };
 };
 
@@ -68,7 +69,7 @@ const updateSession = async (sessionId: string, data: BudgetSession) => {
     await session.setex(sessionId, ttl === -1 ? expirationInSeconds : ttl, JSON.stringify(data));
 };
 
-const isExpired = (timestamp: number) => unix() > timestamp;
+export const isExpired = (timestamp: number) => unix() > timestamp;
 
 const updateCurrentPath = (
     event: H3Event<EventHandlerRequest>,
@@ -79,10 +80,9 @@ const updateCurrentPath = (
     return data;
 };
 
-// @todo decide if you should keep this function or delete session entirely
-const removeAuthFromSession = (data: BudgetSession): BudgetSession => {
+export const removeAuthFromSession = async (sessionId: string, data: BudgetSession) => {
     data.auth = undefined;
-    return data;
+    await updateSession(sessionId, data);
 };
 
 export const removeSession = async (ctx: ServerContext) => {
@@ -138,7 +138,10 @@ export const createSession = async (event: H3Event<EventHandlerRequest>) => {
     await setNewSession(event);
 };
 
-export const setUserInSession = async (ctx: ServerContext, uid: string) => {
+export const setUserInSession = async (
+    ctx: ServerContext,
+    user: { uuid: string; activated_at: Date | null },
+) => {
     // @todo pass the event to this function from GraphQL and uncomment line below
     // await createSession(ctx);
 
@@ -151,8 +154,9 @@ export const setUserInSession = async (ctx: ServerContext, uid: string) => {
 
     const { id, ...data } = obj;
     data.auth = {
-        uid,
+        uid: user.uuid,
         expires_at: unix() + convertMinutesToSeconds(Number(config.AUTH_EXPIRATION)),
+        activated_at: user.activated_at,
     };
     await updateSession(id, data);
 };
