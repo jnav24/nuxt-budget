@@ -7,11 +7,20 @@ import { removeSession } from '~/utils/server/session';
 const { validateRequest } = useFormValidator();
 
 const setBuilder = (pothos: typeof builder) => {
+    pothos.mutationField('forgotPassword', (t) =>
+        t.field({
+            skipTypeScopes: true,
+            type: 'Auth',
+            resolve: () => {
+                return { success: true };
+            },
+        }),
+    );
+
     pothos.mutationField('logout', (t) =>
         t.field({
             skipTypeScopes: true,
             type: 'Auth',
-            nullable: true,
             resolve: async (_parent, _args, { event }, _info) => {
                 const {
                     node: { req, res },
