@@ -34,8 +34,9 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  forgotPassword: Auth;
   login: Auth;
-  logout?: Maybe<Auth>;
+  logout: Auth;
   register: Auth;
 };
 

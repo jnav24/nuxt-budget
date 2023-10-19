@@ -16,8 +16,9 @@ input LoginInput {
 }
 
 type Mutation {
+  forgotPassword: Auth!
   login(input: LoginInput!): Auth!
-  logout: Auth
+  logout: Auth!
   register: Auth!
 }
 
