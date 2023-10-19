@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const { login } = useGQLAuth();
+const router = useRouter();
+
 const form = reactive({
     email: {
         rules: ['required', 'email'],
@@ -14,34 +17,58 @@ const form = reactive({
     },
 });
 
+const isLoading = ref(false);
 const valid = ref(false);
+const error: Ref<string | null> = ref(null);
 
-const handleSubmit = (e: SubmitEvent) => {
-    // do something
-    console.log(e);
-    console.log(form);
+const handleSubmit = async (e: SubmitEvent) => {
+    isLoading.value = true;
+
+    try {
+        const response = await login.mutate({
+            input: {
+                email: form.email.value,
+                password: form.password.value,
+                rememberMe: false,
+            },
+        });
+
+        if (response?.data) {
+            // @todo get the redirect from the response; see how I am doing it in chatty chat
+            router.push({ path: '/dashboard' });
+        }
+    } catch (err) {
+        error.value = (err as any).message || 'Something unexpected has occurred';
+    } finally {
+        isLoading.value = false;
+    }
 };
 </script>
 
 <template>
-    <h1 class="text-center text-2xl text-gray-800 sm:text-gray-600 font-header mb-8">
+    <h1 class="mb-8 text-center font-header text-2xl text-gray-800 sm:text-gray-600">
         Welcome Back
     </h1>
 
+    <SharedAlert v-if="error" :message="error" type="error" />
+
     <BudgetForm v-model:valid="valid" @handleSubmit="handleSubmit">
-        <BudgetInput label="Email" v-model:value="form.email.value" :rules="form.email.rules" />
+        <BudgetInput v-model:value="form.email.value" label="Email" :rules="form.email.rules" />
 
         <BudgetInput
+            v-model:value="form.password.value"
             label="Password"
             password
-            v-model:value="form.password.value"
             :rules="form.password.rules"
         />
 
         <div class="my-4">
-            <BudgetCheckbox label="Remember Me" v-model:value="form.rememberMe.value" />
+            <BudgetCheckbox v-model:value="form.rememberMe.value" label="Remember Me" />
         </div>
 
-        <BudgetButton block color="secondary" :disabled="!valid">Login</BudgetButton>
+        <BudgetButton block color="secondary" :disabled="isLoading || !valid" submit>
+            <IconsLoader v-if="isLoading" className="animate-spin text-gray-500 w-5 h-5" />
+            <span v-if="!isLoading">Login</span>
+        </BudgetButton>
     </BudgetForm>
 </template>
