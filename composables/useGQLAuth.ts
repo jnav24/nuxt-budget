@@ -15,10 +15,20 @@ const logoutMutation = gql`
     }
 `;
 
+const forgotPasswordMutation = gql`
+    mutation forgotPasswordMutation($input: ForgotPasswordInput!) {
+        forgotPassword(input: $input) {
+            success
+        }
+    }
+`;
+
 export default function useGQLAuth() {
+    const forgotPassword = useMutation(forgotPasswordMutation);
+
     const login = useMutation(loginMutation);
 
     const logout = useMutation(logoutMutation);
 
-    return { login, logout };
+    return { forgotPassword, login, logout };
 }
