@@ -1,7 +1,7 @@
 import { builder } from '~/server/graphql/builder';
 import { useFormValidator } from '#budgetform';
-import { LoginInput } from '~/server/graphql/schemas/inputs/AuthInput';
-import { authenticateUser, removeRememberMe } from '~/utils/server/authenticate';
+import { ForgotPasswordInput, LoginInput } from '~/server/graphql/schemas/inputs/AuthInput';
+import { authenticateUser, getUserByEmail, removeRememberMe } from '~/utils/server/authenticate';
 import { removeSession } from '~/utils/server/session';
 
 const { validateRequest } = useFormValidator();
@@ -11,7 +11,13 @@ const setBuilder = (pothos: typeof builder) => {
         t.field({
             skipTypeScopes: true,
             type: 'Auth',
-            resolve: () => {
+            args: { input: t.arg({ type: ForgotPasswordInput, required: true }) },
+            resolve: (_parent, { input }, context) => {
+                validateRequest(input, { email: ['required', 'email'] });
+                const user = getUserByEmail(input.email);
+                if (user) {
+                    // add forgot passowrd to job queue
+                }
                 return { success: true };
             },
         }),

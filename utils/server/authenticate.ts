@@ -59,7 +59,7 @@ const setRememberMe = async (
     }
 };
 
-const getUserByEmail = (email: string) => {
+export const getUserByEmail = (email: string) => {
     return db.user.findFirst({
         where: {
             email: {
