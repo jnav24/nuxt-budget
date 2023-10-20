@@ -7,3 +7,9 @@ export const LoginInput = builder.inputType('LoginInput', {
         rememberMe: t.boolean(),
     }),
 });
+
+export const ForgotPasswordInput = builder.inputType('ForgotPasswordInput', {
+    fields: (t) => ({
+        email: t.string({ required: true }),
+    }),
+});
