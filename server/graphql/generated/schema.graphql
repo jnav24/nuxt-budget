@@ -9,6 +9,10 @@ type Base {
 
 scalar DateTime
 
+input ForgotPasswordInput {
+  email: String!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -16,7 +20,7 @@ input LoginInput {
 }
 
 type Mutation {
-  forgotPassword: Auth!
+  forgotPassword(input: ForgotPasswordInput!): Auth!
   login(input: LoginInput!): Auth!
   logout: Auth!
   register: Auth!

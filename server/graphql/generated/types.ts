@@ -26,6 +26,10 @@ export type Base = {
   success?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type ForgotPasswordInput = {
+  email: Scalars['String']['input'];
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -38,6 +42,11 @@ export type Mutation = {
   login: Auth;
   logout: Auth;
   register: Auth;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  input: ForgotPasswordInput;
 };
 
 
