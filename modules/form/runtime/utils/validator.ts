@@ -5,7 +5,9 @@ import { ValidationException } from './exceptions';
 class BudgetError extends Error {}
 
 function validateEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^(?!\.)(?!.*\.\.)([A-Z0-9_+-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i.test(
+        email,
+    );
 }
 
 function validateRequired(val: string | number): boolean {
