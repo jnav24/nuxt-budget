@@ -83,7 +83,7 @@ const Component: TagType = props.tag ?? (variantsMapping[props.variant] as TagTy
 </script>
 
 <template>
-    <Component :class="styles()">
+    <component :is="Component" :class="styles()">
         <slot />
-    </Component>
+    </component>
 </template>
