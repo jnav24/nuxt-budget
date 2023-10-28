@@ -1,6 +1,7 @@
 <script setup lang="ts">
 export type ProfileLink = {
-    to: { name: string };
+    to?: string;
+    action?: string;
     label: string;
     icon: string;
 };
@@ -11,12 +12,12 @@ const showSubNav = ref(false);
 
 const fullName = 'James Bond';
 
-const profileLinks = [
+const profileLinks: ProfileLink[] = [
     // { to: { name: 'settings' }, label: 'Settings', icon: 'CogIcon' },
-    // { to: { name: 'logout' }, label: 'Logout', icon: 'LogoutIcon' },
+    { action: 'logout', label: 'Logout', icon: resolveComponent('UiIconLogout') },
 ];
-const menu = [
-    { link: '/dashboard', label: 'Home', icon: resolveComponent('UiIconHome') },
+const menu: ProfileLink[] = [
+    { to: '/dashboard', label: 'Home', icon: resolveComponent('UiIconHome') },
     // { link: { name: 'budgets' }, label: 'Budgets', icon: 'UiIconChart' },
     // {
     //     link: { name: 'reports' },
@@ -33,6 +34,10 @@ const resetSelected = () => {
 const toggleSelected = () => {
     showSubNav.value = !showSubNav.value;
     buttonSelected.value = !buttonSelected.value;
+};
+
+const handleNavClicked = (item: string) => {
+    console.log('=======', item);
 };
 </script>
 
@@ -86,7 +91,11 @@ const toggleSelected = () => {
                         </span>
                     </button>
 
-                    <DashboardSubNavItems :items="profileLinks" :show="showSubNav" />
+                    <DashboardSubNavItems
+                        :items="profileLinks"
+                        :show="showSubNav"
+                        @nav-clicked="handleNavClicked($event)"
+                    />
                 </DashboardSubNav>
             </div>
         </div>
@@ -96,7 +105,7 @@ const toggleSelected = () => {
                 v-for="(item, index) in menu"
                 :key="index"
                 link-type="inverted"
-                :link-to="item.link"
+                :link-to="item.to"
             >
                 <component :is="item.icon" class="h-4 w-4"></component>
                 <span class="ml-2">{{ item.label }}</span>
@@ -105,7 +114,7 @@ const toggleSelected = () => {
 
         <div class="hidden bg-white shadow-sm sm:block">
             <div class="container mx-auto flex flex-row">
-                <SharedLink v-for="(item, index) in menu" :key="index" :link-to="item.link">
+                <SharedLink v-for="(item, index) in menu" :key="index" :link-to="item.to">
                     <component :is="item.icon" class="h-4 w-4"></component>
                     <span class="ml-2">{{ item.label }}</span>
                 </SharedLink>

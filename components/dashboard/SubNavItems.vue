@@ -7,17 +7,11 @@ type Props = {
     show: boolean;
 };
 
+const emit = defineEmits<{ (e: 'nav-clicked', v: string): void }>();
 const props = defineProps<Props>();
-
 const subNav = ref(null);
 
 onMounted(() => (subNav.value as any).classList.add('h-0', 'py-0'));
-
-const getIcon = (icon: string) => {
-    return defineAsyncComponent({
-        loader: () => import(`@/components/ui-elements/icons/${icon}.vue`),
-    });
-};
 
 const handleClick = (value: string) => {
     emit('nav-clicked', value);
@@ -45,21 +39,21 @@ watch(
         }"
     >
         <div v-for="(link, i) in items" :key="i">
-            <router-link
+            <NuxtLink
                 v-if="link.to"
                 :to="link.to"
                 class="flex flex-row items-center justify-start px-2 py-3 text-sm text-gray-600 hover:bg-gray-200"
             >
-                <component :is="getIcon(link.icon)" class="h-4 w-4" />
+                <component v-if="link.icon" :is="link.icon" class="h-4 w-4" />
                 <span class="ml-2">{{ link.label }}</span>
-            </router-link>
+            </NuxtLink>
 
             <div
                 v-else
                 class="flex cursor-pointer flex-row items-center justify-start px-2 py-3 text-sm text-gray-600 hover:bg-gray-200"
-                @click="handleClick(link.value ?? '')"
+                @click="handleClick(link.action ?? '')"
             >
-                <component :is="getIcon(link.icon)" class="h-4 w-4" />
+                <component v-if="link.icon" :is="link.icon" class="h-4 w-4" />
                 <span class="ml-2">{{ link.label }}</span>
             </div>
         </div>
