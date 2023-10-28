@@ -16,13 +16,13 @@ const profileLinks = [
     // { to: { name: 'logout' }, label: 'Logout', icon: 'LogoutIcon' },
 ];
 const menu = [
-    { link: { name: 'home' }, label: 'Home', icon: 'UiIconHome' },
-    { link: { name: 'budgets' }, label: 'Budgets', icon: 'UiIconChart' },
-    {
-        link: { name: 'reports' },
-        label: 'Reports',
-        icon: 'UiIconReports',
-    },
+    { link: '/dashboard', label: 'Home', icon: resolveComponent('UiIconHome') },
+    // { link: { name: 'budgets' }, label: 'Budgets', icon: 'UiIconChart' },
+    // {
+    //     link: { name: 'reports' },
+    //     label: 'Reports',
+    //     icon: 'UiIconReports',
+    // },
 ];
 
 const resetSelected = () => {

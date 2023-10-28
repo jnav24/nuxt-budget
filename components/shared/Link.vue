@@ -1,7 +1,7 @@
 <script setup lang="ts">
 type Props = {
     linkTo: string;
-    linkType: string;
+    linkType?: string;
 };
 
 withDefaults(defineProps<Props>(), { linkType: 'default' });
