@@ -71,7 +71,7 @@ const handleNavClicked = (item: string) => {
                         @click="showMobileNav = false"
                         class="mr-2 block h-8 w-8 cursor-pointer rounded p-1 text-white outline-none focus:bg-dark-primary active:bg-dark-primary sm:hidden"
                     />
-                    <img src="@/assets/logo.png" alt="" class="crisp h-10" />
+                    <img src="~/assets/images/logo.png" alt="" class="crisp h-10" />
                 </div>
 
                 <DashboardSubNav>
