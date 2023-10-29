@@ -2,7 +2,7 @@ import { builder } from '~/server/graphql/builder';
 import { useFormValidator } from '#budgetform';
 import { ForgotPasswordInput, LoginInput } from '~/server/graphql/schemas/inputs/AuthInput';
 import { authenticateUser, getUserByEmail, removeRememberMe } from '~/utils/server/authenticate';
-import { removeSession } from '~/utils/server/session';
+import { removeAuthFromSession } from '~/utils/server/session';
 
 const { validateRequest } = useFormValidator();
 
@@ -27,12 +27,13 @@ const setBuilder = (pothos: typeof builder) => {
         t.field({
             skipTypeScopes: true,
             type: 'Auth',
-            resolve: async (_parent, _args, { event }, _info) => {
+            resolve: async (_parent, _args, { event, session }, _info) => {
                 const {
                     node: { req, res },
                 } = event;
+                const { id, ...rest } = session;
                 await removeRememberMe({ req, res });
-                await removeSession({ req, res });
+                await removeAuthFromSession(id, rest);
                 return { success: true };
             },
         }),
