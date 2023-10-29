@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import { match } from '~/utils/common';
+
+const { logout } = useGQLAuth();
+
+const logUserOut = async () => {
+    const response = await logout.mutate();
+
+    if (response?.data) {
+        navigateTo({ path: '/auth/login' });
+    }
+};
+
 export type ProfileLink = {
     to?: string;
     action?: string;
@@ -37,7 +49,10 @@ const toggleSelected = () => {
 };
 
 const handleNavClicked = (item: string) => {
-    console.log('=======', item);
+    match(item, {
+        logout: logUserOut(),
+        default: null,
+    });
 };
 </script>
 
