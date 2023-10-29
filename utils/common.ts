@@ -83,6 +83,27 @@ const getErrorMessage = (err: string | Error | unknown) => {
     return err;
 };
 
+interface MatchType<T> {
+    default: T;
+    [key: string]: T;
+}
+
+const match = <T>(value: boolean | string | number, obj: MatchType<T>): T => {
+    for (const [index, val] of Object.entries(obj)) {
+        if (index === 'default') {
+            return val;
+        }
+
+        for (const key of Object.values(index.split(','))) {
+            if (value.toString() === key) {
+                return val;
+            }
+        }
+    }
+
+    return obj.default;
+};
+
 export {
     arrayColumn,
     toCamelCase,
@@ -94,4 +115,5 @@ export {
     ucFirst,
     randomString,
     getErrorMessage,
+    match,
 };
