@@ -25,7 +25,7 @@ const showSubNav = ref(false);
 const fullName = 'James Bond';
 
 const profileLinks: ProfileLink[] = [
-    // { to: { name: 'settings' }, label: 'Settings', icon: 'CogIcon' },
+    { to: '/dashboard/settings', label: 'Settings', icon: resolveComponent('UiIconCog') },
     { action: 'logout', label: 'Logout', icon: resolveComponent('UiIconLogout') },
 ];
 const menu: ProfileLink[] = [
