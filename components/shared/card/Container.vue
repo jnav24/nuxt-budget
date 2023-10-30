@@ -1,5 +1,5 @@
 <script setup lang="ts">
-export const CardProvider = Symbol('Card Provider');
+import { CardProvider } from '~/providers/CardProvider';
 
 type Props = {
     color?: string;
