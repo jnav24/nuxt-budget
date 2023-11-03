@@ -27,5 +27,10 @@ const handleSave = () => {};
         />
 
         <BudgetInput v-model:value="form.email" label="Email" :rules="['required', 'email']" />
+
+        <SharedCardFooter class="flex flex-row items-center justify-end !pr-0">
+            <SharedInlineAlert v-model:show="showAlert" :is-success="isSuccess" />
+            <BudgetButton color="secondary" :disabled="!valid">Save</BudgetButton>
+        </SharedCardFooter>
     </BudgetForm>
 </template>
