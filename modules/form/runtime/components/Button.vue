@@ -21,19 +21,19 @@ const validateSubmit = () => {};
 
 <template>
     <button
-        class="focus:outline-none focus:shadow-outline transition duration-150 rounded"
+        class="focus:shadow-outline rounded transition duration-150 focus:outline-none"
         :class="{
-            'bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-700 border-gray-300 border':
+            'border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 active:bg-gray-200':
                 color === 'default' && !disabled,
-            'bg-primary hover:bg-opacity-85 active:bg-dark-primary text-white':
+            'bg-primary text-white hover:bg-opacity-85 active:bg-dark-primary':
                 color === 'primary' && !disabled,
-            'bg-secondary hover:bg-opacity-85 active:bg-dark-secondary text-gray-700':
+            'bg-secondary text-gray-700 hover:bg-opacity-85 active:bg-dark-secondary':
                 color === 'secondary' && !disabled,
             'bg-danger hover:bg-opacity-85 active:bg-dark-danger': color === 'danger' && !disabled,
-            'rounded-full p-2 mr-2': fab,
-            'p-1 rounded-md': checkbox,
-            'py-3 px-6 rounded-md text-sm mr-2': !fab && !checkbox,
-            'bg-gray-300 text-gray-700 cursor-text': disabled,
+            'rounded-full p-2': fab,
+            'rounded-md p-1': checkbox,
+            'rounded-md px-6 py-3 text-sm': !fab && !checkbox,
+            'cursor-text bg-gray-300 text-gray-700': disabled,
             'w-full': block,
         }"
         :disabled="disabled"
