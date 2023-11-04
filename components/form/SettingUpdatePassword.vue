@@ -4,9 +4,9 @@ const showAlert = ref(false);
 const valid = ref(false);
 
 const form = reactive({
-    email: '',
-    firstName: '',
-    lastName: '',
+    password: '',
+    newPassword: '',
+    confirmNewPassword: '',
 });
 
 const handleSave = () => {};
@@ -15,21 +15,24 @@ const handleSave = () => {};
 <template>
     <BudgetForm v-model:valid="valid" @handleSubmit="handleSave">
         <BudgetInput
-            v-model:value="form.firstName"
+            v-model:value="form.password"
             label="Current Password"
-            :rules="['required', 'min:3']"
+            :rules="['required']"
+            password
         />
 
         <BudgetInput
-            v-model:value="form.lastName"
+            v-model:value="form.newPassword"
             label="New Password"
-            :rules="['required', 'min:3']"
+            :rules="['required', 'min:8', 'alpha-numeric']"
+            password
         />
 
         <BudgetInput
-            v-model:value="form.lastName"
+            v-model:value="form.confirmNewPassword"
             label="Confirm Password"
-            :rules="['required', 'min:3']"
+            :rules="['required', 'match:new-password']"
+            password
         />
 
         <SharedCardFooter class="flex flex-row items-center justify-end !pr-0">
