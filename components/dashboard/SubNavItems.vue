@@ -21,7 +21,7 @@ watch(
     () => props.show,
     (n) => {
         if (!n) {
-            setTimeout(() => (subNav.value as any).classList.add('h-0', 'py-0'), 400);
+            setTimeout(() => (subNav.value as any)?.classList.add('h-0', 'py-0'), 400);
         } else {
             (subNav.value as any).classList.remove('h-auto', 'py-1');
         }
