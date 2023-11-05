@@ -23,6 +23,7 @@ module.exports = {
                 'dark-secondary': '#A88D3E',
                 primary: '#45ADA8',
                 secondary: '#EFC958',
+                success: '#198754',
             },
             minHeight: {
                 64: '16rem',
