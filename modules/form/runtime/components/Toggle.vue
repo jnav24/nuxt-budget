@@ -5,17 +5,17 @@ defineProps<{ value: boolean }>();
 
 <template>
     <button
-        @click="emit('update:value', !value)"
-        class="rounded-full w-16 shadow-inner focus:outline-none text-left border transition-all duration-100 ease-in-out"
+        class="w-16 rounded-full border text-left shadow-inner transition-all duration-100 ease-in-out focus:outline-none"
         :class="{
-            'border-success bg-success bg-opacity-50 border-opacity-50': value,
-            'border-gray-200 dark:border-gray-400 bg-gray-200 dark:bg-gray-400': !value,
+            'border-success bg-success border-opacity-50 bg-opacity-50': value,
+            'border-gray-200 bg-gray-200 dark:border-gray-400 dark:bg-gray-400': !value,
         }"
         style="height: 2.15rem"
         type="button"
+        @click="emit('update:value', !value)"
     >
         <span
-            class="inline-block rounded-full bg-white dark:bg-gray-700 w-8 h-8 transition duration-100 ease-in-out transform"
+            class="inline-block h-8 w-8 transform rounded-full bg-white transition duration-100 ease-in-out dark:bg-gray-700"
             :class="{ 'translate-x-9/10': value, 'translate-x-0': !value }"
         />
     </button>
