@@ -28,7 +28,7 @@ export async function createGraphQLContext(event: H3Event<EventHandlerRequest>):
     let user = null;
 
     if (currentSession && currentSession.auth?.uid) {
-        user = await db.user.findFirst({
+        user = (await db.user.findFirst({
             where: {
                 NOT: [
                     {
@@ -45,7 +45,7 @@ export async function createGraphQLContext(event: H3Event<EventHandlerRequest>):
                 id: true,
                 email: true,
             },
-        });
+        })) as Pick<User, 'id' | 'email'> | null;
     }
 
     return {
