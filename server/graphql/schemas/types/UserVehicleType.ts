@@ -11,8 +11,8 @@ const setBuilder = (pothos: typeof builder) => {
             year: t.exposeString('year'),
             color: t.exposeString('color'),
             license: t.exposeString('license', { nullable: true }),
+            // @todo do I need both active and deleted fields?
             active: t.exposeBoolean('active'),
-            deleted: t.expose('image', { nullable: true, type: 'DateTime' }),
             isDeleted: t.boolean({
                 resolve: (vehicle: UserVehicle) => !!vehicle.deleted_at,
             }),

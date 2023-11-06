@@ -6,8 +6,9 @@ const setBuilder = (pothos: typeof builder) => {
         fields: (t) => ({
             id: t.exposeID('uuid'),
             email: t.exposeString('email'),
-            emailVerifiedAt: t.expose('email_verified_at', { nullable: true, type: 'DateTime' }),
-            rememberToken: t.exposeString('remember_token'),
+            isVerified: t.boolean({
+                resolve: (user) => !!user.email_verified_at,
+            }),
             profile: t.relation('UserProfile'),
             vehicles: t.relation('UserVehicle'),
         }),
