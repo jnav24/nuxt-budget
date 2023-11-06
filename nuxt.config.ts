@@ -24,13 +24,13 @@ export default defineNuxtConfig({
     apollo: {
         clients: {
             default: {
-                httpEndpoint: '/api/graphql',
+                httpEndpoint: 'http://localhost:3313/api/graphql',
             },
         },
     },
     graphqlServer: {
         schema: './server/graphql/generated/schema.graphql',
-        url: '/api/graphql',
+        url: 'http://localhost:3313/api/graphql',
     },
     postcss: {
         plugins: {
