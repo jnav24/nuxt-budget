@@ -1,4 +1,4 @@
-const loginMutation = gql`
+const LOGIN_MUTATION = gql`
     mutation loginMutation($input: LoginInput!) {
         login(input: $input) {
             mfa
@@ -7,7 +7,7 @@ const loginMutation = gql`
     }
 `;
 
-const logoutMutation = gql`
+const LOGOUT_MUTATION = gql`
     mutation logoutMutation {
         logout {
             success
@@ -15,7 +15,7 @@ const logoutMutation = gql`
     }
 `;
 
-const forgotPasswordMutation = gql`
+const FORGOT_PASSWORD_MUTATION = gql`
     mutation forgotPasswordMutation($input: ForgotPasswordInput!) {
         forgotPassword(input: $input) {
             success
@@ -24,11 +24,11 @@ const forgotPasswordMutation = gql`
 `;
 
 export default function useGQLAuth() {
-    const forgotPassword = useMutation(forgotPasswordMutation);
+    const forgotPassword = useMutation(FORGOT_PASSWORD_MUTATION);
 
-    const login = useMutation(loginMutation);
+    const login = useMutation(LOGIN_MUTATION);
 
-    const logout = useMutation(logoutMutation);
+    const logout = useMutation(LOGOUT_MUTATION);
 
     return { forgotPassword, login, logout };
 }
