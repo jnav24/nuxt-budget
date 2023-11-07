@@ -3,6 +3,7 @@ import { useFormValidator } from '#budgetform';
 import { ForgotPasswordInput, LoginInput } from '~/server/graphql/schemas/inputs/AuthInput';
 import { authenticateUser, getUserByEmail, removeRememberMe } from '~/utils/server/authenticate';
 import { removeAuthFromSession } from '~/utils/server/session';
+import { UnauthorizedException } from '~/utils/exceptions';
 
 const { validateRequest } = useFormValidator();
 
@@ -12,9 +13,9 @@ const setBuilder = (pothos: typeof builder) => {
             skipTypeScopes: true,
             type: 'Auth',
             args: { input: t.arg({ type: ForgotPasswordInput, required: true }) },
-            resolve: (_parent, { input }, context) => {
+            resolve: async (_parent, { input }, _context) => {
                 validateRequest(input, { email: ['required', 'email'] });
-                const user = getUserByEmail(input.email);
+                const user = await getUserByEmail(input.email);
                 if (user) {
                     // add forgot passowrd to job queue
                 }
@@ -25,12 +26,16 @@ const setBuilder = (pothos: typeof builder) => {
 
     pothos.mutationField('logout', (t) =>
         t.field({
-            skipTypeScopes: true,
             type: 'Auth',
             resolve: async (_parent, _args, { event, session }, _info) => {
                 const {
                     node: { req, res },
                 } = event;
+
+                if (!session) {
+                    throw new UnauthorizedException('User is not logged in');
+                }
+
                 const { id, ...rest } = session;
                 await removeRememberMe({ req, res });
                 await removeAuthFromSession(id, rest);
