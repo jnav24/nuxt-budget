@@ -7,6 +7,9 @@ const setBuilder = (pothos: typeof builder) => {
             id: t.exposeID('uuid'),
             firstName: t.exposeString('first_name'),
             lastName: t.exposeString('last_name'),
+            fullName: t.string({
+                resolve: (profile) => `${profile.first_name} ${profile.last_name}`,
+            }),
             image: t.exposeString('image'),
         }),
     });
