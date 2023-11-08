@@ -32,15 +32,15 @@ type Query {
 
 type User {
   email: String!
-  emailVerifiedAt: DateTime
   id: ID!
+  isVerified: Boolean!
   profile: UserProfile!
-  rememberToken: String!
   vehicles: [UserVehicle!]!
 }
 
 type UserProfile {
   firstName: String!
+  fullName: String!
   id: ID!
   image: String!
   lastName: String!
@@ -49,7 +49,6 @@ type UserProfile {
 type UserVehicle {
   active: Boolean!
   color: String!
-  deleted: DateTime
   id: ID!
   isDeleted: Boolean!
   license: String

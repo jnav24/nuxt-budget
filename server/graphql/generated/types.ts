@@ -62,16 +62,16 @@ export type Query = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
-  emailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
+  isVerified: Scalars['Boolean']['output'];
   profile: UserProfile;
-  rememberToken: Scalars['String']['output'];
   vehicles: Array<UserVehicle>;
 };
 
 export type UserProfile = {
   __typename?: 'UserProfile';
   firstName: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   image: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
@@ -81,7 +81,6 @@ export type UserVehicle = {
   __typename?: 'UserVehicle';
   active: Scalars['Boolean']['output'];
   color: Scalars['String']['output'];
-  deleted?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   isDeleted: Scalars['Boolean']['output'];
   license?: Maybe<Scalars['String']['output']>;
