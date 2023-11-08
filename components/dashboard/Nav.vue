@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { ConcreteComponent } from 'vue';
 import { match } from '~/utils/common';
 
 const { logout } = useGQLAuth();
+const { user } = useGQLUser();
+
+const userData = computed(() => user.result?.value?.getUser);
 
 const logUserOut = async () => {
     const response = await logout.mutate();
@@ -15,15 +19,14 @@ export type ProfileLink = {
     to?: string;
     action?: string;
     label: string;
-    icon: string;
+    icon: string | ConcreteComponent;
 };
 
 const buttonSelected = ref(false);
 const showMobileNav = ref(false);
 const showSubNav = ref(false);
 
-const fullName = 'James Bond';
-
+// @todo add page where user can add vehicles
 const profileLinks: ProfileLink[] = [
     { to: '/dashboard/settings', label: 'Settings', icon: resolveComponent('UiIconCog') },
     { action: 'logout', label: 'Logout', icon: resolveComponent('UiIconLogout') },
@@ -76,6 +79,7 @@ const handleNavClicked = (item: string) => {
 
                 <DashboardSubNav>
                     <button
+                        v-if="userData"
                         class="ease flex rounded-full border-2 p-2 text-sm transition duration-300 focus:outline-none"
                         :class="{
                             'border-white': buttonSelected,
@@ -92,7 +96,7 @@ const handleNavClicked = (item: string) => {
                         </span>
 
                         <span class="ellipsis my-0 ml-4 mr-2 hidden max-w-32 text-white sm:block">
-                            {{ fullName }}
+                            {{ userData.profile.fullName }}
                         </span>
 
                         <span class="hidden sm:block">
