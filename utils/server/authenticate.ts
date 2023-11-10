@@ -51,8 +51,14 @@ const setRememberMe = async (
                 where: { email },
                 data: { remember_token: hash },
             });
+            const tokenObj = {
+                email,
+                hash,
+            };
 
-            setServerCookie(context, REMEMBER_TOKEN, encryptWithAES(hash), { maxAge: 43000 });
+            setServerCookie(context, REMEMBER_TOKEN, encryptWithAES(JSON.stringify(tokenObj)), {
+                maxAge: 43000,
+            });
         }
     } catch (err) {
         error(`Remember me token: ${getErrorMessage(err)}`);
@@ -104,12 +110,18 @@ export const removeRememberMe = async (ctx: ServerContext) => {
         const cookie = getServerCookie(ctx, REMEMBER_TOKEN);
 
         if (cookie) {
-            const decryptToken = decryptAES(cookie);
+            const decryptToken = JSON.parse(decryptAES(cookie));
 
-            await db.user.update({
-                where: { remember_token: decryptToken },
-                data: { remember_token: null },
+            const user = await db.user.findFirstOrThrow({
+                where: { email: decryptToken.email },
             });
+
+            if (user.remember_token === decryptToken.hash) {
+                db.user.update({
+                    where: { email: decryptToken.email },
+                    data: { remember_token: null },
+                });
+            }
 
             deleteServerCookie(ctx, REMEMBER_TOKEN);
         }
