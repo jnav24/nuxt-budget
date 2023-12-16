@@ -18,7 +18,7 @@ export default class Factory<T extends {}> {
         this.state = {} as T;
     }
 
-    private validate<T extends {}>(definition = {} as Partial<T>) {
+    private validate(definition = {} as Partial<T>) {
         if (
             !this.tableName ||
             (!Object.keys(this.definition()).length &&
@@ -29,7 +29,7 @@ export default class Factory<T extends {}> {
         }
     }
 
-    private setDefinitionData<T extends {}>(definition = {} as Partial<T>) {
+    private setDefinitionData(definition = {} as Partial<T>) {
         const iterateList = Array.from(new Array(this.iterate).keys());
 
         return iterateList.map(async () => {
@@ -58,7 +58,7 @@ export default class Factory<T extends {}> {
         return this;
     }
 
-    public async create<T extends {}>(definition = {} as Partial<T>) {
+    public async create(definition = {} as Partial<T>) {
         this.validate(definition);
         const tableName = this.tableName as keyof PrismaClient;
         const data = await Promise.all(this.setDefinitionData(definition));
