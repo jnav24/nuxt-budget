@@ -25,6 +25,17 @@ export default defineNuxtConfig({
         clients: {
             default: {
                 httpEndpoint: 'http://localhost:3313/api/graphql',
+                // @NOTE
+                // These settings allow Apollo Playground to read the cookies.
+                // You will also have to make sure to turn on `include cookies` in
+                // the `connection settings` in Apollo Playground.
+                httpLinkOptions: {
+                    credentials: 'include',
+                    headers: {
+                        'Access-Control-Allow-Origin': 'https://sandbox.embed.apollographql.com',
+                        'Access-Control-Allow-Credentials': 'true',
+                    },
+                },
             },
         },
     },
