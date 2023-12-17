@@ -1,19 +1,28 @@
 import { IncomingMessage } from 'node:http';
 import { getClientIp } from 'request-ip';
 import { EventHandlerRequest, H3Event } from 'h3';
+import { User, UserProfile } from '@prisma/client';
 import { ServerContext } from '~/server/graphql/builder';
 import { decryptAES, encryptWithAES, hashWithSha256 } from '~/utils/server/encryption';
 import { convertMinutesToSeconds, unix } from '~/utils/timestamp';
 import { randomString } from '~/utils/common';
 import { error } from '~/utils/logger';
-import { useDatabase, useRedis } from '#budgetdb';
+import { useRedis } from '#budgetdb';
 import { deleteServerCookie, getServerCookie, setServerCookie } from '~/utils/server/cookies';
 
 const config = useRuntimeConfig();
 const { session, sessionRead } = useRedis();
-const { db } = useDatabase();
 
-type BudgetCookie = { id: string };
+export type BudgetCookie = { id: string };
+export type BudgetSessionAuth = {
+    id: bigint;
+    uid: string;
+    avatar: string | null;
+    first_name: string;
+    last_name: string;
+    expires_at: number;
+    activated_at: Date | null;
+};
 type BudgetSession = {
     flash: {
         error: string[];
@@ -23,14 +32,8 @@ type BudgetSession = {
         current: string;
         previous: string;
     };
-    auth?: {
-        uid: string;
-        expires_at: number;
-        activated_at: Date | null;
-    };
+    auth?: BudgetSessionAuth;
 };
-
-export type BudgetContext = BudgetSession & BudgetCookie;
 
 const expirationInMinutes = Number(config.SESSION_EXPIRATION);
 const expirationInSeconds = convertMinutesToSeconds(expirationInMinutes);
@@ -64,9 +67,15 @@ export const getCurrentSession = async (
     return { id: dCookie.id, ...JSON.parse(obj) };
 };
 
+const stringify = <T extends Record<string, any>>(data: T) => {
+    return JSON.stringify(data, (_, v) => {
+        return typeof v === 'bigint' ? v.toString() : v;
+    });
+};
+
 const updateSession = async (sessionId: string, data: BudgetSession) => {
     const ttl = await session.ttl(sessionId);
-    await session.setex(sessionId, ttl === -1 ? expirationInSeconds : ttl, JSON.stringify(data));
+    await session.setex(sessionId, ttl === -1 ? expirationInSeconds : ttl, stringify(data));
 };
 
 export const isExpired = (timestamp: number) => unix() > timestamp;
@@ -138,10 +147,7 @@ export const createSession = async (event: H3Event<EventHandlerRequest>) => {
     await setNewSession(event);
 };
 
-export const setUserInSession = async (
-    ctx: ServerContext,
-    user: { uuid: string; activated_at: Date | null },
-) => {
+export const setUserInSession = async (ctx: ServerContext, user: User) => {
     // @todo pass the event to this function from GraphQL and uncomment line below
     // await createSession(ctx);
 
@@ -153,10 +159,15 @@ export const setUserInSession = async (
     }
 
     const { id, ...data } = obj;
+    const profile = (user as User & { UserProfile: UserProfile }).UserProfile;
     data.auth = {
+        id: user.id,
         uid: user.uuid,
         expires_at: unix() + convertMinutesToSeconds(Number(config.AUTH_EXPIRATION)),
-        activated_at: user.activated_at,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        avatar: profile.image,
+        activated_at: user.email_verified_at,
     };
     await updateSession(id, data);
 };

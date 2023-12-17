@@ -67,6 +67,7 @@ const setRememberMe = async (
 
 export const getUserByEmail = (email: string): Promise<null | User> => {
     return db.user.findFirst({
+        include: { UserProfile: true },
         where: {
             email: {
                 equals: email,
@@ -95,10 +96,7 @@ export const authenticateUser = async (
     await verifyUser(key, password, user);
     await setRememberMe(rememberMe as boolean, email as string, key, { req, res });
     await clearAttempts(key);
-    await setUserInSession(
-        { req, res },
-        { uuid: user!.uuid, activated_at: user!.email_verified_at },
-    );
+    await setUserInSession({ req, res }, user as User);
 };
 
 export const registerUser = async () => {};
