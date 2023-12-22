@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FormContext, FormContextType, FormElementValidationType, RulesType } from '../types/form';
+import type { FormContextType, FormElementValidationType, RulesType } from '../types/form';
+import { FormContext } from '../types/form';
 import { validateRules } from '../utils/validator';
 
 const props = defineProps<{ valid: boolean }>();

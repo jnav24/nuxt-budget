@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import useForm from '../composables/useForm';
 
 const emit = defineEmits<{ (e: 'update:value', value: string): void }>();

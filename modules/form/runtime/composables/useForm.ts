@@ -1,4 +1,5 @@
-import { FormContext, FormContextType, RulesType } from '../types/form';
+import type { FormContextType, RulesType } from '../types/form';
+import { FormContext } from '../types/form';
 
 type Props = {
     label: string;

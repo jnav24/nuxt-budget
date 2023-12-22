@@ -1,4 +1,4 @@
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import { toTitleCase } from './functions';
 import { ValidationException } from './exceptions';
 

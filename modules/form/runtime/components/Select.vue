@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import useForm from '../composables/useForm';
 
 type Props = {
@@ -86,12 +86,12 @@ const handleSelection = (value: string) => {
     <FormFieldsLabel :error="error" :label="label" :labelId="labelId" />
 
     <div
-        class="border-solid border px-2 py-2 mt-2 rounded-md flex items-center justify-between outline-none transform relative"
+        class="relative mt-2 flex transform items-center justify-between rounded-md border border-solid px-2 py-2 outline-none"
         :class="{
             'border-red-600 bg-white text-red-600': error && !isDisabled,
-            'border-gray-300 hover:border-gray-600 dark:border-gray-700 bg-white dark:bg-dark-main cursor-pointer text-gray-600 hover:text-gray-700 focus:border-primary transition duration-300':
+            'dark:bg-dark-main cursor-pointer border-gray-300 bg-white text-gray-600 transition duration-300 hover:border-gray-600 hover:text-gray-700 focus:border-primary dark:border-gray-700':
                 !error && !isDisabled,
-            'bg-gray-200 dark:bg-gray-800 border-gray-300 dark:border-gray-600 cursor-text text-gray-500':
+            'cursor-text border-gray-300 bg-gray-200 text-gray-500 dark:border-gray-600 dark:bg-gray-800':
                 isDisabled,
             'z-50': selected,
             'z-0': !selected,
@@ -100,7 +100,7 @@ const handleSelection = (value: string) => {
         @blur="handleBlur()"
         @click="handleClick()"
     >
-        <span class="flex-1 text-gray-500 text-sm">{{ getPlaceholder }}</span>
+        <span class="flex-1 text-sm text-gray-500">{{ getPlaceholder }}</span>
 
         <IconsChevronDown
             className="transform transition duration-300 h-6 w-6"
@@ -108,7 +108,7 @@ const handleSelection = (value: string) => {
         />
 
         <div
-            class="bg-white dark:bg-dark-main border border-gray-300 shadow-sm absolute transform top-0 left-0 rounded w-full transition ease-out duration-300 max-h-48 overflow-y-auto"
+            class="dark:bg-dark-main absolute left-0 top-0 max-h-48 w-full transform overflow-y-auto rounded border border-gray-300 bg-white shadow-sm transition duration-300 ease-out"
             :class="{
                 'translate-y-12 opacity-100': selected,
                 'translate-y-0 opacity-0': !selected,
@@ -116,7 +116,7 @@ const handleSelection = (value: string) => {
             :ref="dropDownItems"
         >
             <div
-                class="hover:bg-gray-200 p-2 text-sm"
+                class="p-2 text-sm hover:bg-gray-200"
                 v-for="(item, index) in items"
                 :key="index"
                 @click="handleSelection(item[itemValue])"

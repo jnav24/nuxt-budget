@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import useForm from '../composables/useForm';
 
 const props = defineProps<{
@@ -32,7 +32,7 @@ const updateValue = () => {
         </BudgetButton>
 
         <BudgetButton checkbox color="primary" @click="updateValue" v-if="value === 'checked'">
-            <IconsCheck class="w-4 h-4" />
+            <IconsCheck class="h-4 w-4" />
         </BudgetButton>
 
         <div class="ml-2">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import useForm from '../composables/useForm';
 import {
     addMonth,
@@ -110,13 +110,13 @@ const updateValue = (day: number) => {
 
         <div class="relative mt-2" ref="datePicker">
             <div
-                class="absolute left-0 top-0 flex flex-col items-center justify-center h-full w-10 bg-gray-600 rounded-l-md"
+                class="absolute left-0 top-0 flex h-full w-10 flex-col items-center justify-center rounded-l-md bg-gray-600"
             >
-                <CalendarIcon class="w-5 h-5 text-white" />
+                <CalendarIcon class="h-5 w-5 text-white" />
             </div>
             <input
                 :id="labelId"
-                class="w-full py-2 pl-12 pr-2 text-gray-500 border rounded outline-none"
+                class="w-full rounded border py-2 pl-12 pr-2 text-gray-500 outline-none"
                 :class="{
                     'border-gray-300 focus:border-primary': !error,
                     'border-red-600': error,
@@ -130,7 +130,7 @@ const updateValue = (day: number) => {
             />
 
             <div
-                class="bg-white px-4 py-3 absolute left-0 top-0 w-64 min-h-64 shadow-2xl z-50 origin-top-left transform translate-y-12 transition ease-out duration-200"
+                class="absolute left-0 top-0 z-50 min-h-64 w-64 origin-top-left translate-y-12 transform bg-white px-4 py-3 shadow-2xl transition duration-200 ease-out"
                 :class="{
                     'scale-100 opacity-100': selected,
                     'scale-0 opacity-0': !selected,
@@ -138,17 +138,17 @@ const updateValue = (day: number) => {
             >
                 <div class="flex flex-row items-center justify-between text-gray-700">
                     <Button fab @click="dateCounter--">
-                        <ChevronLeftIcon class="cursor-pointer w-4 h-4" />
+                        <ChevronLeftIcon class="h-4 w-4 cursor-pointer" />
                     </Button>
                     <span class="text-sm">
                         {{ formatTimeZone('MMMM yyyy', 'UTC', dateHeader) }}
                     </span>
                     <Button fab @click="dateCounter++" class="translate-x-2 transform">
-                        <ChevronRightIcon class="cursor-pointer w-4 h-4" />
+                        <ChevronRightIcon class="h-4 w-4 cursor-pointer" />
                     </Button>
                 </div>
 
-                <div class="grid-cols-7 gap-1 grid my-2">
+                <div class="my-2 grid grid-cols-7 gap-1">
                     <span
                         class="text-center text-sm text-gray-500"
                         v-for="(day, index) in days"
@@ -158,17 +158,17 @@ const updateValue = (day: number) => {
                     </span>
                 </div>
 
-                <div class="grid-cols-7 gap-1 grid">
+                <div class="grid grid-cols-7 gap-1">
                     <div v-for="(date, index) in daysList" :key="index">
                         <span v-if="date > 31">&nbsp;</span>
                         <button
                             v-if="date < 32"
-                            class="text-sm py-1 rounded-full text-center w-full focus:outline-none focus:shadow-outline"
+                            class="focus:shadow-outline w-full rounded-full py-1 text-center text-sm focus:outline-none"
                             :class="{
-                                'text-gray-600 bg-white hover:bg-gray-200 border-0':
+                                'border-0 bg-white text-gray-600 hover:bg-gray-200':
                                     !isSelected(date + 1) && !isToday(date + 1),
-                                'text-white bg-primary border-0': isSelected(date + 1),
-                                'text-primary shadow-inner bg-gray-200':
+                                'border-0 bg-primary text-white': isSelected(date + 1),
+                                'bg-gray-200 text-primary shadow-inner':
                                     isToday(date + 1) && !isSelected(date + 1),
                             }"
                             @click="updateValue(date + 1)"

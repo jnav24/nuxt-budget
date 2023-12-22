@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RulesType } from '../types/form';
+import type { RulesType } from '../types/form';
 import useForm from '../composables/useForm';
 
 type Props = {
@@ -45,11 +45,11 @@ const handleKeyPress = (e: KeyboardEvent) => {
         <textarea
             :id="labelId"
             :aria-label="labelId"
-            class="w-full resize-none border rounded-lg outline-none p-2"
+            class="w-full resize-none rounded-lg border p-2 outline-none"
             :class="{
                 'bg-gray-200 text-gray-500': readOnly,
                 'bg-white': !readOnly,
-                'border-gray-300 dark:border-gray-700 focus:border-primary': error,
+                'border-gray-300 focus:border-primary dark:border-gray-700': error,
                 'bg-red-600': !error,
             }"
             @change="handleChange($event)"
