@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 .bg-image {
-    background: url('./assets/images/onboard_bg_1-1.jpg') no-repeat center center
+    background: url('/assets/images/onboard_bg_1-1.jpg') no-repeat center center
     fixed;
     background-size: cover;
     @apply absolute left-0 top-0 w-full h-full z-10;
