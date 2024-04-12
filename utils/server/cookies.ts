@@ -22,7 +22,24 @@ const getExpiration = (minutes: number) => {
 
 export const getServerCookie = (ctx: ServerContext, name: string) => {
     const cookie = new Cookies(ctx.req, ctx.res);
-    return cookie.get(name);
+    const value = cookie.get(name);
+    const cookieHeader = ctx.req.headers.cookie;
+    const cookieAuthorization = ctx.req.headers.authorization;
+
+    if (!value && cookieAuthorization) {
+        return (cookieAuthorization as string).split('Bearer ')[1];
+    }
+
+    if (!value && cookieHeader) {
+        for (const c of cookieHeader.split('; ')) {
+            const [cookieName, cookieValue] = c.split('=');
+            if (cookieName.trim() === config.SESSION_NAME) {
+                return cookieValue;
+            }
+        }
+    }
+
+    return value;
 };
 
 export const setServerCookie = (
