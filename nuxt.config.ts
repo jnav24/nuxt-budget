@@ -21,6 +21,9 @@ export default defineNuxtConfig({
         'nuxt-graphql-server',
         '@nuxtjs/apollo',
     ],
+    // @note
+    // Apollo configuration set here will
+    // be overriden by apolloConfig.ts
     apollo: {
         clients: {
             default: {
