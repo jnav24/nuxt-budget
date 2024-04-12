@@ -54,6 +54,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         APP_ENV: process.env.APP_ENV ?? 'development',
+        APP_URL: process.env.APP_URL,
         AUTH_EXPIRATION: process.env.AUTH_EXPIRATION ?? '15',
         DB_URL: process.env.DB_URL,
         HASH_KEY: process.env.HASH_KEY,
@@ -67,6 +68,7 @@ export default defineNuxtConfig({
         RATELIMIT_ATTEMPTS: process.env.RATELIMIT_ATTEMPTS ?? '3',
         public: {
             APP_NAME: process.env.APP_NAME,
+            APP_URL: process.env.APP_URL,
         },
     },
 });
