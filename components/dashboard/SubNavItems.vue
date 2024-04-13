@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProfileLink } from '~/components/dashboard/Nav.vue';
+import type { ProfileLink } from '~/types/subnav';
 
 type Props = {
     icon?: string;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ConcreteComponent } from 'vue';
 import { match } from '~/utils/common';
+import type { ProfileLink } from '~/types/subnav';
 
 const { logout } = useGQLAuth();
 const { user } = useGQLUser();
@@ -13,13 +13,6 @@ const logUserOut = async () => {
     if (response?.data) {
         navigateTo({ path: '/auth/login' });
     }
-};
-
-export type ProfileLink = {
-    to?: string;
-    action?: string;
-    label: string;
-    icon: string | ConcreteComponent;
 };
 
 const buttonSelected = ref(false);
