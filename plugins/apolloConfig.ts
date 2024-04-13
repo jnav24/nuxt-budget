@@ -39,19 +39,21 @@ export default defineNuxtPlugin((nuxtApp) => {
         });
     });
 
-    // Default httpLink (main communication for apollo)
-    const httpLink = createHttpLink({
-        credentials: 'include',
-        uri: `${envVars.APP_URL}/api/graphql`,
-        // uri: envVars.public.APOLLO_ENDPOINT,
-        useGETForQueries: true,
-    });
+    if (envVars?.APP_URL) {
+        // Default httpLink (main communication for apollo)
+        const httpLink = createHttpLink({
+            credentials: 'include',
+            uri: `${envVars.APP_URL}/api/graphql`,
+            // uri: envVars.public.APOLLO_ENDPOINT,
+            useGETForQueries: true,
+        });
 
-    // Set custom links in the apollo client.
-    // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
-    // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
-    $apollo.defaultClient.setLink(from([errorLink, authLink, customLink, httpLink]));
+        // Set custom links in the apollo client.
+        // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
+        // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
+        $apollo.defaultClient.setLink(from([errorLink, authLink, customLink, httpLink]));
 
-    // For using useQuery in `@vue/apollo-composable`
-    provideApolloClient($apollo.defaultClient);
+        // For using useQuery in `@vue/apollo-composable`
+        provideApolloClient($apollo.defaultClient);
+    }
 });
