@@ -54,7 +54,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         APP_ENV: process.env.APP_ENV ?? 'development',
-        APP_URL: process.env.APP_URL,
+        APP_URL: process.env.APP_URL ?? 'http://localhost:3313',
         AUTH_EXPIRATION: process.env.AUTH_EXPIRATION ?? '15',
         DB_URL: process.env.DB_URL,
         HASH_KEY: process.env.HASH_KEY,
